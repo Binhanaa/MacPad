@@ -99,7 +99,7 @@ static NSMenu *buildLanguageMenu() {
     NSMenu *udlMenu = submenu(@"User Defined Language");
     [udlMenu addItem:item(@"Define your language…", @selector(showDefineLanguage:), @"")];
     [udlMenu addItem:item(@"Open User Defined Language Folder…", @selector(openUDLFolder:), @"")];
-    [udlMenu addItem:item(@"Nextpad User Defined Languages Collection", @selector(openUDLCollection:), @"")];
+    [udlMenu addItem:item(@"MacPad User Defined Languages Collection", @selector(openUDLCollection:), @"")];
     [m addItem:withSubmenu(@"User Defined Language", udlMenu)];
 
     // Trailing separator anchors the dynamic UDL-insertion zone. ALL loaded
@@ -127,21 +127,21 @@ static NSMenu *buildLanguageMenu() {
     [main addItem:appItem];
     NSMenu *appMenu = submenu(@"App");
     appItem.submenu = appMenu;
-    [appMenu addItemWithTitle:@"About Nextpad" action:@selector(showAboutPanel:) keyEquivalent:@""];
+    [appMenu addItemWithTitle:@"About MacPad" action:@selector(showAboutPanel:) keyEquivalent:@""];
     [appMenu addItemWithTitle:@"Check for Updates…" action:@selector(checkForUpdates:) keyEquivalent:@""];
-    [appMenu addItemWithTitle:@"Install nextpad++ Command Line Tool…" action:@selector(installCommandLineTool:) keyEquivalent:@""];
+    [appMenu addItemWithTitle:@"Install MacPad Command Line Tool…" action:@selector(installCommandLineTool:) keyEquivalent:@""];
     addSep(appMenu);
     // Apple renamed "Preferences…" to "Settings…" starting in macOS Ventura (13).
     NSString *prefsTitle = ([NSProcessInfo processInfo].operatingSystemVersion.majorVersion >= 13)
         ? @"Settings…" : @"Preferences…";
     [appMenu addItem:item(prefsTitle, @selector(showPreferences:), @",")];
     addSep(appMenu);
-    [appMenu addItemWithTitle:@"Hide Nextpad" action:@selector(hide:) keyEquivalent:@"h"];
+    [appMenu addItemWithTitle:@"Hide MacPad" action:@selector(hide:) keyEquivalent:@"h"];
     NSMenuItem *hideOthers = [appMenu addItemWithTitle:@"Hide Others" action:@selector(hideOtherApplications:) keyEquivalent:@"h"];
     hideOthers.keyEquivalentModifierMask = NSEventModifierFlagCommand | NSEventModifierFlagOption;
     [appMenu addItemWithTitle:@"Show All" action:@selector(unhideAllApplications:) keyEquivalent:@""];
     addSep(appMenu);
-    [appMenu addItemWithTitle:@"Quit Nextpad" action:@selector(terminate:) keyEquivalent:@"q"];
+    [appMenu addItemWithTitle:@"Quit MacPad" action:@selector(terminate:) keyEquivalent:@"q"];
 
     // ── File ─────────────────────────────────────────────────────────────────
     NSMenuItem *fileItem = [[NSMenuItem alloc] init];
@@ -389,10 +389,10 @@ static NSMenu *buildLanguageMenu() {
     [editMenu addItem:item(@"Clipboard History", @selector(showClipboardHistory:), @"")];
     addSep(editMenu);
 
-    NSMenu *roMenu = submenu(@"Read-Only in Nextpad");
+    NSMenu *roMenu = submenu(@"Read-Only in MacPad");
     [roMenu addItem:item(@"Toggle Read-Only",        @selector(toggleReadOnly:),  @"")];
     [roMenu addItem:item(@"Clear Read-Only Flag", @selector(clearReadOnlyFlag:), @"")];
-    [editMenu addItem:withSubmenu(@"Read-Only in Nextpad", roMenu)];
+    [editMenu addItem:withSubmenu(@"Read-Only in MacPad", roMenu)];
     NSMenu *lockedMenu = submenu(@"Locked Attribute (macOS)");
     [lockedMenu addItem:item(@"Lock",   @selector(lockFileAttribute:),   @"")];
     [lockedMenu addItem:item(@"Unlock", @selector(unlockFileAttribute:), @"")];
@@ -880,8 +880,8 @@ static NSMenu *buildLanguageMenu() {
 
     [helpMenu addItem:item(@"Command Line Arguments…", @selector(showCLIHelp:), @"")];
     addSep(helpMenu);
-    [helpMenu addItem:item(@"Nextpad macOS Home",              @selector(openNppHome:),        @"")];
-    [helpMenu addItem:item(@"Nextpad macOS Project Page",      @selector(openNppProjectPage:), @"")];
+    [helpMenu addItem:item(@"MacPad Home",              @selector(openNppHome:),        @"")];
+    [helpMenu addItem:item(@"MacPad Project Page",      @selector(openNppProjectPage:), @"")];
     [helpMenu addItem:item(@"Online User Manual",@selector(openNppManual:),      @"")];
     // Commented out — community forum URL not yet established for the
     // rebranded project. Re-enable once a forum is set up.

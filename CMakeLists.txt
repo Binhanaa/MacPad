@@ -484,9 +484,9 @@ add_custom_command(TARGET NotepadPlusPlusMac POST_BUILD
     COMMENT "Ad-hoc code signing the app bundle")
 
 set_target_properties(NotepadPlusPlusMac PROPERTIES
-    OUTPUT_NAME "Nextpad"
+    OUTPUT_NAME "MacPad"
     MACOSX_BUNDLE_INFO_PLIST "${CMAKE_SOURCE_DIR}/resources/Info.plist"
-    MACOSX_BUNDLE_BUNDLE_NAME "Nextpad"
+    MACOSX_BUNDLE_BUNDLE_NAME "MacPad"
     MACOSX_BUNDLE_GUI_IDENTIFIER "org.nextpadplusplus.mac"
     MACOSX_BUNDLE_BUNDLE_VERSION "1.0.8"
     MACOSX_BUNDLE_SHORT_VERSION_STRING "1.0.8"

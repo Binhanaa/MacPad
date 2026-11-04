@@ -1699,7 +1699,7 @@ static BOOL _widgetHasAttr(NSString *xml, NSString *styleName, NSString *attr, N
     NSOpenPanel *panel = [NSOpenPanel openPanel];
     panel.title = [[NppLocalizer shared] translate:@"Import Style Theme"];
     panel.allowedFileTypes = @[@"xml"];
-    panel.message = [[NppLocalizer shared] translate:@"Select a Nextpad++ theme XML file to apply"];
+    panel.message = [[NppLocalizer shared] translate:@"Select a MacPad theme XML file to apply"];
     [panel beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse result) {
         if (result != NSModalResponseOK) return;
         [self _loadNppThemeXML:panel.URL];

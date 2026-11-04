@@ -60,7 +60,7 @@ static NSDate *NppMarkLaunch(void) {
         NSDictionary *marker = [NSDictionary dictionaryWithContentsOfFile:path];
         id pid = marker[@"pid"];
         if ([pid isKindOfClass:[NSNumber class]] && NppIsOtherLiveInstance([pid intValue])) {
-            NSLog(@"[Nextpad] another instance (pid %@) is running; skipping crash recovery", pid);
+            NSLog(@"[MacPad] another instance (pid %@) is running; skipping crash recovery", pid);
             return nil;                                   // not ours: leave it alone
         }
         id since    = marker[@"recoverSince"];
@@ -215,7 +215,7 @@ static void NppRecoveryDone(void) {
 
     // Title bar addition (-titleAdd)
     if (cli.titleAdd.length) {
-        NSString *base = self.mainWindowController.window.title ?: @"Nextpad";
+        NSString *base = self.mainWindowController.window.title ?: @"MacPad";
         self.mainWindowController.window.title = [NSString stringWithFormat:@"%@ - %@", base, cli.titleAdd];
     }
 
@@ -306,7 +306,7 @@ static void NppRecoveryDone(void) {
         NSTimeInterval elapsed = -[self.launchStart timeIntervalSinceNow];
         NSString *msg = [NSString stringWithFormat:@"Loading time: %.2f seconds", elapsed];
         NSAlert *a = [[NSAlert alloc] init];
-        a.messageText = [[NppLocalizer shared] translate:@"Nextpad Loading Time"];
+        a.messageText = [[NppLocalizer shared] translate:@"MacPad Loading Time"];
         a.informativeText = msg;
         a.icon = [[NSImage alloc] initWithContentsOfFile:
             NppConfigSubpath(@"plugins/Config/logo100px.png")];
@@ -898,7 +898,7 @@ static void NppRecoveryDone(void) {
 #endif
 
     NSAlert *about = [[NSAlert alloc] init];
-    about.messageText = [NSString stringWithFormat:@"Nextpad macOS v%@     (%@)", version, archStr];
+    about.messageText = [NSString stringWithFormat:@"MacPad v%@     (%@)", version, archStr];
 
     NSString *license =
         @"GNU General Public Licence\n\n"
@@ -916,7 +916,7 @@ static void NppRecoveryDone(void) {
 
     about.informativeText = [NSString stringWithFormat:
         @"Build time: %s - %s\n\n"
-        @"Home: https://nextpad.org\n\n"
+        @"Home: https://github.com/Binhanaa/MacPad\n\n"
         @"%@", __DATE__, __TIME__, license];
 
     // Use our logo
@@ -936,7 +936,7 @@ static void NppRecoveryDone(void) {
 
 // ── Update check (GitHub Releases API) ──────────────────────────────────────
 
-static NSString *const kGitHubReleasesAPI = @"https://api.github.com/repos/nextpad-plus-plus/nextpad-plus-plus-macos/releases/latest";
+static NSString *const kGitHubReleasesAPI = @"https://api.github.com/repos/Binhanaa/MacPad/releases/latest";
 static NSString *const kUpdateMenuItemTag = @"checkForUpdatesMenuItem";
 
 /// Find the "Check for Updates..." menu item in the app menu.
@@ -1032,7 +1032,7 @@ static NSString *const kUpdateMenuItemTag = @"checkForUpdatesMenuItem";
                     NSAlert *a = [[NSAlert alloc] init];
                     a.messageText = [loc translate:@"You're Up to Date"];
                     a.informativeText = [NSString stringWithFormat:
-                        @"Nextpad %@ %@", currentVersion, [loc translate:@"is the latest version."]];
+                        @"MacPad %@ %@", currentVersion, [loc translate:@"is the latest version."]];
                     [a runModal];
                 }
             }
@@ -1049,7 +1049,7 @@ static NSString *const kUpdateMenuItemTag = @"checkForUpdatesMenuItem";
 
     NppLocalizer *loc = [NppLocalizer shared];
     NSAlert *alert = [[NSAlert alloc] init];
-    alert.messageText = [NSString stringWithFormat:@"Nextpad v%@ %@", version, [loc translate:@"is Available"]];
+    alert.messageText = [NSString stringWithFormat:@"MacPad v%@ %@", version, [loc translate:@"is Available"]];
     alert.informativeText = [NSString stringWithFormat:
         @"%@ v%@.\n\n%@",
         [loc translate:@"You are currently running"],

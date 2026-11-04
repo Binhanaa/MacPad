@@ -4,9 +4,9 @@
 <plist version="1.0">
 <dict>
     <key>CFBundleName</key>
-    <string>Nextpad</string>
+    <string>MacPad</string>
     <key>CFBundleDisplayName</key>
-    <string>Nextpad</string>
+    <string>MacPad</string>
     <key>CFBundleIdentifier</key>
     <string>org.nextpadplusplus.mac</string>
     <key>CFBundleVersion</key>
@@ -18,7 +18,7 @@
     <key>CFBundleSignature</key>
     <string>????</string>
     <key>CFBundleExecutable</key>
-    <string>Nextpad</string>
+    <string>MacPad</string>
     <key>NSPrincipalClass</key>
     <string>NppApplication</string>
     <key>CFBundleIconFile</key>
@@ -32,13 +32,13 @@
     <key>NSSupportsAutomaticGraphicsSwitching</key>
     <true/>
     <key>NSDownloadsFolderUsageDescription</key>
-    <string>Nextpad needs access to open and edit files in Downloads.</string>
+    <string>MacPad needs access to open and edit files in Downloads.</string>
     <key>NSDesktopFolderUsageDescription</key>
-    <string>Nextpad needs access to open and edit files on Desktop.</string>
+    <string>MacPad needs access to open and edit files on Desktop.</string>
     <key>NSDocumentsFolderUsageDescription</key>
-    <string>Nextpad needs access to open and edit files in Documents.</string>
+    <string>MacPad needs access to open and edit files in Documents.</string>
     <key>NSRemovableVolumesUsageDescription</key>
-    <string>Nextpad needs access to open and edit files on external drives.</string>
+    <string>MacPad needs access to open and edit files on external drives.</string>
     <!-- File-type associations.
          LSHandlerRank=Alternate means we appear in right-click → Open With…
          submenu but never automatically take over a file type a user already
@@ -141,12 +141,12 @@
             <key>NSMenuItem</key>
             <dict>
                 <key>default</key>
-                <string>Open with Nextpad</string>
+                <string>Open with MacPad</string>
             </dict>
             <key>NSMessage</key>
             <string>openFilesService</string>
             <key>NSPortName</key>
-            <string>Nextpad</string>
+            <string>MacPad</string>
             <key>NSRequiredContext</key>
             <dict>
                 <key>NSTextContent</key>

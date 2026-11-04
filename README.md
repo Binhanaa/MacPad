@@ -1,15 +1,17 @@
-# Nextpad
+# MacPad
 
-Free native code editor for Mac. Nextpad opens, edits, and saves source files with syntax highlighting, tabs, and right-to-left text. It is built for people who write code on macOS and want a fast editor with no subscription.
+Free native code editor for Mac. MacPad opens, edits, and saves source files with syntax highlighting, tabs, and right-to-left text. It is built for people who write code on macOS and want a fast editor with no subscription.
 
-Nextpad is free software under the [GNU General Public License v3.0](LICENSE). There is no account, no telemetry, and no upload of your files.
+MacPad is free software under the [GNU General Public License v3.0](LICENSE). There is no account, no telemetry, and no upload of your files.
+
+Maintained by [Binhanaa](https://github.com/Binhanaa).
 
 ## Install
 
-1. Download [Nextpad.dmg](dist/Nextpad.dmg), or the latest file from [Releases](https://github.com/Binhanaa/Nextpad/releases).
+1. Download [MacPad.dmg](dist/MacPad.dmg), or the latest file from [Releases](https://github.com/Binhanaa/MacPad/releases).
 2. Open the disk image.
-3. Drag **Nextpad** to **Applications**.
-4. Open Nextpad from Applications or Spotlight.
+3. Drag **MacPad** to **Applications**.
+4. Open MacPad from Applications or Spotlight.
 
 macOS 11 or later. Apple silicon and Intel.
 
@@ -24,7 +26,7 @@ macOS 11 or later. Apple silicon and Intel.
 
 ## Privacy
 
-Nextpad does not have an account and does not send the contents of your files anywhere. Preferences, backups, and the session stay in `~/Library/Application Support/Nextpad++` on this Mac. An optional update check only asks GitHub whether a newer release exists. It does not include your documents.
+MacPad does not have an account and does not send the contents of your files anywhere. Preferences, backups, and the session stay in `~/Library/Application Support/Nextpad++` on this Mac. An optional update check only asks GitHub whether a newer release exists. It does not include your documents.
 
 ## Build
 
@@ -35,7 +37,7 @@ cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build --target NotepadPlusPlusMac -j 8
 ```
 
-The app is `build/Nextpad.app`.
+The app is `build/MacPad.app`.
 
 Headless search tests:
 
@@ -58,7 +60,7 @@ By contributing, you agree that your contribution is licensed under GPL-3.0.
 
 ## License and credit
 
-Nextpad is distributed under GPL-3.0, the same license as [Notepad++](https://notepad-plus-plus.org).
+MacPad is distributed under GPL-3.0, the same license as [Notepad++](https://notepad-plus-plus.org).
 
 - **Don Ho** — original author of Notepad++.
 - **Andrey Letov** — macOS port that this project continues.

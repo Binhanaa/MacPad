@@ -17,9 +17,9 @@ static NSString *_tahoeConfigDir(void) {
 }
 
 static NSString *const kSchemaHeader =
-    @" Tahoe Toolbar Layout (Nextpad++ macOS — Liquid Glass appearance)\n"
+    @" Tahoe Toolbar Layout (MacPad — Liquid Glass appearance)\n"
     @"  ============================================================\n"
-    @"  This file is generated and managed by Nextpad++. It is LIVE: it takes\n"
+    @"  This file is generated and managed by MacPad. It is LIVE: it takes\n"
     @"  effect immediately when the appearance is set to Tahoe (no rename needed,\n"
     @"  unlike toolbarButtonsConf.xml). Edit it from Preferences ▸ Toolbar, or by\n"
     @"  hand here. Delete it to restore defaults.\n\n"

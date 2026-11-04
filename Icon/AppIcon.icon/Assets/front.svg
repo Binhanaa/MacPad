@@ -1,3 +1,54 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
-  <path fill="#000000" d="M312 292H432L592 522V292H712V732H592L432 502V732H312Z"/>
+  <rect width="1024" height="1024" fill="#000000"/>
+  <g fill="#ffffff" fill-opacity="0.14" font-family="ui-monospace, Menlo, monospace" font-size="26">
+    <text x="64" y="110">{}</text>
+    <text x="204" y="110">-></text>
+    <text x="344" y="110">=></text>
+    <text x="484" y="110">if</text>
+    <text x="624" y="110">//</text>
+    <text x="764" y="110">::</text>
+    <text x="904" y="110">fn</text>
+    <text x="64" y="210">fn</text>
+    <text x="204" y="210">()</text>
+    <text x="344" y="210">[]</text>
+    <text x="484" y="210">{}</text>
+    <text x="624" y="210">-></text>
+    <text x="764" y="210">=></text>
+    <text x="904" y="210">if</text>
+    <text x="64" y="310">if</text>
+    <text x="204" y="310">//</text>
+    <text x="764" y="310">[]</text>
+    <text x="904" y="310">{}</text>
+    <text x="64" y="410">{}</text>
+    <text x="204" y="410">-></text>
+    <text x="764" y="410">::</text>
+    <text x="904" y="410">fn</text>
+    <text x="64" y="510">fn</text>
+    <text x="204" y="510">()</text>
+    <text x="764" y="510">=></text>
+    <text x="904" y="510">if</text>
+    <text x="64" y="610">if</text>
+    <text x="204" y="610">//</text>
+    <text x="764" y="610">[]</text>
+    <text x="904" y="610">{}</text>
+    <text x="64" y="710">{}</text>
+    <text x="204" y="710">-></text>
+    <text x="764" y="710">::</text>
+    <text x="904" y="710">fn</text>
+    <text x="64" y="810">fn</text>
+    <text x="204" y="810">()</text>
+    <text x="344" y="810">[]</text>
+    <text x="484" y="810">{}</text>
+    <text x="624" y="810">-></text>
+    <text x="764" y="810">=></text>
+    <text x="904" y="810">if</text>
+    <text x="64" y="910">if</text>
+    <text x="204" y="910">//</text>
+    <text x="344" y="910">::</text>
+    <text x="484" y="910">fn</text>
+    <text x="624" y="910">()</text>
+    <text x="764" y="910">[]</text>
+    <text x="904" y="910">{}</text>
+  </g>
+  <path d="M372 744 L372 280 L512 500 L652 280 L652 744" fill="none" stroke="#ffffff" stroke-width="112" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="2"/>
 </svg>

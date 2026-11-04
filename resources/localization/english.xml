@@ -41,7 +41,7 @@ Translation note:
 					<Item subMenuId="edit-onSelection" name="&amp;On Selection"/>
 					<Item subMenuId="edit-multiSelectALL" name="Multi-select ALL"/>
 					<Item subMenuId="edit-multiSelectNext" name="Multi-select Next"/>
-					<Item subMenuId="edit-readonlyInNextpad++" name="Read-Only in Nextpad++"/>
+					<Item subMenuId="edit-readonlyInNextpad++" name="Read-Only in MacPad"/>
 					<Item subMenuId="search-changeHistory" name="Change History"/>
 					<Item subMenuId="search-markAll" name="Style &amp;All Occurrences of Token"/>
 					<Item subMenuId="search-markOne" name="Style &amp;One Token"/>
@@ -367,17 +367,17 @@ Translation note:
 					<Item id="46016" name="None (Normal Text)"/>
 					<Item id="46250" name="Define your language..."/>
 					<Item id="46300" name="Open User Defined Language folder..."/>
-					<Item id="46301" name="Nextpad++ User Defined Languages Collection"/>
+					<Item id="46301" name="MacPad User Defined Languages Collection"/>
 					<Item id="46180" name="User-Defined"/>
-					<Item id="47000" name="About Nextpad++"/>
+					<Item id="47000" name="About MacPad"/>
 					<Item id="47010" name="Command Line Arguments..."/>
-					<Item id="47001" name="Nextpad++ Home"/>
-					<Item id="47002" name="Nextpad++ Project Page"/>
+					<Item id="47001" name="MacPad Home"/>
+					<Item id="47002" name="MacPad Project Page"/>
 					<Item id="47003" name="Online User Manual"/>
-					<Item id="47004" name="Nextpad++ Community (Forum)"/>
+					<Item id="47004" name="MacPad Community (Forum)"/>
 					<Item id="47012" name="Debug Info..."/>
 					<Item id="47005" name="Get More Plugins"/>
-					<Item id="47006" name="Update Nextpad++"/>
+					<Item id="47006" name="Update MacPad"/>
 					<Item id="47009" name="Set Updater Proxy..."/>
 					<Item id="48005" name="Import plugin(s)..."/>
 					<Item id="48006" name="Import style theme(s)..."/>
@@ -446,7 +446,7 @@ Translation note:
 				<Item CMDID="41016" name="Move to Recycle Bin"/>
 				<Item CMDID="41014" name="Reload"/>
 				<Item CMDID="41010" name="Print..."/>
-				<Item CMDID="42028" name="Read-Only in Nextpad++"/>
+				<Item CMDID="42028" name="Read-Only in MacPad"/>
 				<Item CMDID="42033" name="Read-Only Attribute in Windows"/>
 				<Item CMDID="2" name="Copy to Clipboard"/>
 				<Item CMDID="42029" name="Copy Full File Path"/>
@@ -1128,7 +1128,7 @@ Translation note:
 				</DefaultDir>
 
 				<FileAssoc title="File Association">
-					<Item id="4008" name="Please exit Nextpad++ and relaunch Nextpad++ in Administrator mode to use this feature."/>
+					<Item id="4008" name="Please exit MacPad and relaunch MacPad in Administrator mode to use this feature."/>
 					<Item id="4009" name="Supported extensions:"/>
 					<Item id="4010" name="Registered extensions:"/>
 				</FileAssoc>
@@ -1213,7 +1213,7 @@ Translation note:
 				</Print>
 
 				<Searching title="Searching">
-					<Item id="6902" name="Use monospaced font in Find dialog (Need to restart Nextpad++)"/>
+					<Item id="6902" name="Use monospaced font in Find dialog (Need to restart MacPad)"/>
 					<Item id="6903" name="Find dialog remains open after search that outputs to results window"/>
 					<Item id="6904" name="Confirm Replace All in All Opened Documents"/>
 					<Item id="6905" name="Replace: Don't move to the following occurrence"/>
@@ -1281,7 +1281,7 @@ Translation note:
 					<Item id="6152" name="Open session in a new instance (and save session automatically on exit)"/>
 					<Item id="6153" name="Always in multi-instance mode"/>
 					<Item id="6154" name="Default (mono-instance)"/>
-					<Item id="6155" name="* The modification of this setting needs to restart Nextpad++"/>
+					<Item id="6155" name="* The modification of this setting needs to restart MacPad"/>
 					<Item id="6171" name="Customize insert Date Time"/>
 					<Item id="6175" name="Reverse default date time order (short &amp;&amp; long formats)"/>
 					<Item id="6172" name="Custom format:"/>
@@ -1364,8 +1364,8 @@ Translation note:
 					</ComboBox>
 					<ComboBox id="6364">
 						<Element name="Disable"/>
-						<Element name="Enable on Nextpad++ startup"/>
-						<Element name="Enable on Nextpad++ exit"/>
+						<Element name="Enable on MacPad startup"/>
+						<Element name="Enable on MacPad exit"/>
 					</ComboBox>
 					<Item id="6308" name="system tray"/>
 					<Item id="6363" name="rendering mode"/>
@@ -1564,7 +1564,7 @@ You can re-activate this dialog in Preferences later."/>
 				<Item id="90104" name="Reload from Disk"/>
 				<Item id="90105" name="Change Search Engine"/>
 				<Item id="90106" name="Run Error"/>
-				<Item id="90107" name="Nextpad++ Loading Time"/>
+				<Item id="90107" name="MacPad Loading Time"/>
 				<Item id="90108" name="Unable to Check for Updates"/>
 				<Item id="90109" name="You're Up to Date"/>
 				<Item id="90110" name="Download"/>
@@ -1650,7 +1650,7 @@ You can re-activate this dialog in Preferences later."/>
 				<Item id="90187" name="LCD Optimized"/>
 				<Item id="90188" name="Simple +/-"/>
 				<Item id="90190" name="Mac (CR)"/>
-				<Item id="90192" name="Select a Nextpad++ theme XML file to apply"/>
+				<Item id="90192" name="Select a MacPad theme XML file to apply"/>
 				<Item id="90193" name="Create new…"/>
 				<Item id="90194" name="Save as…"/>
 				<Item id="90195" name="User language:"/>
@@ -1663,7 +1663,7 @@ You can re-activate this dialog in Preferences later."/>
 				<Item id="90202" name="Invalid Range"/>
 				<Item id="90203" name="Range values must be 0-255 and start must be &lt;= end."/>
 				<Item id="90204" name="contextMenu.xml Not Found"/>
-				<Item id="90205" name="Restart Nextpad++ to regenerate the default contextMenu.xml."/>
+				<Item id="90205" name="Restart MacPad to regenerate the default contextMenu.xml."/>
 				<Item id="90206" name="The file has unsaved changes. Reloading with the new encoding will discard them. Continue?"/>
 				<Item id="90207" name="No response from server."/>
 				<Item id="90208" name="Server returned status"/>
@@ -1768,7 +1768,7 @@ You can re-activate this dialog in Preferences later."/>
 				<Item id="90308" name="Enter command or URL..."/>
 				<Item id="90309" name="Failed to execute:&#10;%@&#10;&#10;%@"/>
 				<Item id="90310" name="Editing contextMenu"/>
-				<Item id="90311" name="Editing contextMenu.xml allows you to modify your Nextpad++ popup context menu on edit zone.&#10;You have to restart your Nextpad++ to take effect after modifying contextMenu.xml."/>
+				<Item id="90311" name="Editing contextMenu.xml allows you to modify your MacPad popup context menu on edit zone.&#10;You have to restart your MacPad to take effect after modifying contextMenu.xml."/>
 				<Item id="90312" name="Already installed"/>
 				<Item id="90313" name="Install nextpad++ Command Line Tool"/>
 				<Item id="90314" name="Installation failed"/>
@@ -1821,11 +1821,11 @@ You can re-activate this dialog in Preferences later."/>
 				<Item id="90361" name="Tahoe"/>
 				<Item id="90362" name="Switch to the New Tahoe look (Beta)"/>
 				<Item id="90363" name="Use macOS-style menus (Beta)"/>
-				<Item id="90364" name="The new Tahoe look will be applied after you restart Nextpad++."/>
-				<Item id="90365" name="The Classic look will be restored after you restart Nextpad++."/>
+				<Item id="90364" name="The new Tahoe look will be applied after you restart MacPad."/>
+				<Item id="90365" name="The Classic look will be restored after you restart MacPad."/>
 				<Item id="90366" name="Quit Now"/>
-				<Item id="90367" name="Menus will be rearranged in the macOS style after you restart Nextpad++."/>
-				<Item id="90368" name="The classic menu layout will be restored after you restart Nextpad++."/>
+				<Item id="90367" name="Menus will be rearranged in the macOS style after you restart MacPad."/>
+				<Item id="90368" name="The classic menu layout will be restored after you restart MacPad."/>
 				<Item id="90369" name="Color"/>
 				<Item id="90370" name="Apply to plugin toolbar icons"/>
 				<Item id="90371" name="In Complete mode plugin icons become a single solid color."/>
@@ -1850,19 +1850,19 @@ You can re-activate this dialog in Preferences later."/>
 				<Item id="90390" name="Choose"/>
 				<Item id="90391" name="Insert Selection:"/>
 				<Item id="90392" name="Use Boost Regex mode (multi-line; restart to apply)"/>
-				<Item id="90393" name="Please restart Nextpad++ to take effect."/>
+				<Item id="90393" name="Please restart MacPad to take effect."/>
 				<Item id="90394" name="Invalid path."/>
 				<Item id="90395" name="Restart Now"/>
-				<Item id="90396" name="Select a folder from/to where Nextpad++ reads/writes its settings"/>
+				<Item id="90396" name="Select a folder from/to where MacPad reads/writes its settings"/>
 				<Item id="90397" name="(don't choose it unless you know what you're doing)"/>
 				<Item id="90398" name="Toolbar icon size"/>
 				<Item id="90399" name="100% (Default)"/>
 				<Item id="90400" name="Mouse wheel scroll speed"/>
 				<Item id="90401" name="1× (off)"/>
 				<Item id="90402" name="Toolbar icon size changed"/>
-				<Item id="90403" name="The new toolbar icon size will take effect the next time Nextpad++ launches."/>
+				<Item id="90403" name="The new toolbar icon size will take effect the next time MacPad launches."/>
 				<Item id="90404" name="Toolbar icons changed"/>
-				<Item id="90405" name="The new toolbar icons will take effect the next time Nextpad++ launches."/>
+				<Item id="90405" name="The new toolbar icons will take effect the next time MacPad launches."/>
 				<Item id="90406" name="New Workspace"/>
 				<Item id="90407" name="Open Workspace"/>
 				<Item id="90408" name="Reload Workspace"/>
@@ -1921,10 +1921,10 @@ You can re-activate this dialog in Preferences later."/>
 				<Item id="90461" name="Donate"/>
 				<Item id="90462" name="Character sets"/>
 				<Item id="90463" name="Minimize"/>
-				<Item id="90464" name="Hide Nextpad++"/>
+				<Item id="90464" name="Hide MacPad"/>
 				<Item id="90465" name="Hide Others"/>
 				<Item id="90466" name="Show All"/>
-				<Item id="90467" name="Quit Nextpad++"/>
+				<Item id="90467" name="Quit MacPad"/>
 				<Item id="90468" name="Save Current Recorded Macro…"/>
 				<Item id="90469" name="Trim Trailing Space and Save"/>
 				<Item id="90470" name="All plugin buttons are hidden, so the Plugins capsule is not shown in the toolbar."/>
@@ -1949,8 +1949,8 @@ You can re-activate this dialog in Preferences later."/>
 		</Dialog>
 		<MessageBox>
 			<!-- $INT_REPLACE$ and $STR_REPLACE$ are place holders, don't translate these place holders. -->
-			<ContextMenuXmlEditWarning title="Editing contextMenu" message="Editing contextMenu.xml allows you to modify your Nextpad++ popup context menu.
-You have to restart your Nextpad++ to take effect after modifying contextMenu.xml."/>
+			<ContextMenuXmlEditWarning title="Editing contextMenu" message="Editing contextMenu.xml allows you to modify your MacPad popup context menu.
+You have to restart your MacPad to take effect after modifying contextMenu.xml."/>
 			<SaveCurrentModifWarning title="Save Current Modification" message="You should save the current modification.
 All the saved modifications cannot be undone.
 
@@ -1959,16 +1959,16 @@ Continue?"/><!-- HowToReproduce: when you openned file is modified but unsaved y
 All the saved modifications cannot be undone.
 
 Continue?"/><!-- HowToReproduce: when you openned file is modified and saved, then you are changing file encoding. -->
-			<CannotMoveDoc title="Move to new Nextpad++ Instance" message="Document is modified, save it then try again."/><!-- HowToReproduce: From your Nextpad++ drag & drop a clean (not dirty) file to outside of Nextpad++, another instance of Nextpad++ will be created. Then from your first Nextpad++ drag & drop an unsaved file to the new instance. -->
-			<DocReloadWarning title="Reload" message="Are you sure you want to reload the current file and lose the changes made in Nextpad++?"/>
+			<CannotMoveDoc title="Move to new MacPad Instance" message="Document is modified, save it then try again."/><!-- HowToReproduce: From your MacPad drag & drop a clean (not dirty) file to outside of MacPad, another instance of MacPad will be created. Then from your first MacPad drag & drop an unsaved file to the new instance. -->
+			<DocReloadWarning title="Reload" message="Are you sure you want to reload the current file and lose the changes made in MacPad?"/>
 			<FileLockedWarning title="Save failed" message="Please check whether if this file is opened in another program"/>
-			<FileAlreadyOpenedInNpp title="" message="The file is already opened in Nextpad++."/><!-- HowToReproduce: Open a new document and open a file "c:/tmp/foo", save this new document by choosing "c:/tmp/foo" as file to save, reply the override popup "yes", then this message appears. -->
+			<FileAlreadyOpenedInNpp title="" message="The file is already opened in MacPad."/><!-- HowToReproduce: Open a new document and open a file "c:/tmp/foo", save this new document by choosing "c:/tmp/foo" as file to save, reply the override popup "yes", then this message appears. -->
 			<RenameTabTemporaryNameAlreadyInUse title="Rename failed" message="The specified name is already in use on another tab."/><!-- HowToReproduce: Rename the tab of an untitled document and provide a name that is the same as an already-existing tab of an untitled document. -->
 			<RenameTabTemporaryNameIsEmpty title="Rename failed" message="The specified name cannot be empty, or it cannot contain only space(s) or TAB(s)."/><!-- HowToReproduce: Rename the tab of an untitled document and provide an empty string or only some white speces. -->
 			<DeleteFileFailed title="Delete File" message="Delete File failed"/><!-- HowToReproduce: this message prevents from system failure. It's hard to reproduce. -->
 
 			<NbFileToOpenImportantWarning title="Amount of files to open is too large" message="$INT_REPLACE$ files are about to be opened.
-Are you sure you want to open them?"/><!-- HowToReproduce: Check "Open all files of folder instead of launching Folder as Workspace on folder dropping" in "Default Directory" of Preferences dialog, then drop a folder which contains more then 200 files into Nextpad++. -->
+Are you sure you want to open them?"/><!-- HowToReproduce: Check "Open all files of folder instead of launching Folder as Workspace on folder dropping" in "Default Directory" of Preferences dialog, then drop a folder which contains more then 200 files into MacPad. -->
 			<SettingsOnCloudError title="Settings on Cloud" message="It seems the path of settings on cloud is set on a read only drive,
 or on a folder needed privilege right for writing access.
 Your settings on cloud will be canceled. Please reset a coherent value via Preference dialog."/>
@@ -1979,7 +1979,7 @@ You have to enable &quot;Open all files of folder instead of launching Folder as
 			<SortingError title="Sorting Error" message="Unable to perform numeric sorting due to line $INT_REPLACE$."/><!-- HowToReproduce: this message prevents from system failure. It's hard to reproduce. -->
 			<SortLocaleMultiple title="Sort not performed" message="Sorting multiple selections is not supported."/><!-- HowToReproduce: Make a multiple selection and choose Edit | Line Operations | Sort Lines In Locale Order. -->
 			<SortLocaleUnknown title="Sort Failed" message="The reason the sort failed cannot be determined."/><!-- HowToReproduce: This condition is theoretical; it is unknown what could cause it. -->
-			<SortLocaleExcept title="Sort Failed" message="$STR_REPLACE$"/><!-- HowToReproduce: Open a large file, e.g. 500MB / 90k lines, in 32-bit Nextpad++ and choose Edit | Line Operations | Sort Lines In Locale Order. -->
+			<SortLocaleExcept title="Sort Failed" message="$STR_REPLACE$"/><!-- HowToReproduce: Open a large file, e.g. 500MB / 90k lines, in 32-bit MacPad and choose Edit | Line Operations | Sort Lines In Locale Order. -->
 			<ColumnModeTip title="Column Mode Tip" message="
 There are 3 ways to switch to column-select mode:
 
@@ -2008,14 +2008,14 @@ Do you want to reload it?"/>
 			<DoReloadOrNotAndLooseChange title="Reload" message="&quot;$STR_REPLACE$&quot;
 
 This file has been modified by another program.
-Do you want to reload it and lose the changes made in Nextpad++?"/>
+Do you want to reload it and lose the changes made in MacPad?"/>
 			<PrehistoricSystemDetected title="Prehistoric system detected" message="It seems you still use a prehistoric system. This feature works only on a modern system, sorry."/><!-- HowToReproduce: Launch "Document Map" under Windows XP. -->
-			<XpUpdaterProblem title="Nextpad++ Updater" message="Nextpad++ updater is not compatible with XP due to the obsolete security layer under XP.
-Do you want to go to Nextpad++ page to download the latest version?"/><!-- HowToReproduce: Run menu "? -> Update Nextpad++" under Windows XP. -->
-			<GUpProxyConfNeedAdminMode title="Proxy Settings" message="Please relaunch Nextpad++ in Admin mode to configure proxy."/>
+			<XpUpdaterProblem title="MacPad Updater" message="MacPad updater is not compatible with XP due to the obsolete security layer under XP.
+Do you want to go to MacPad page to download the latest version?"/><!-- HowToReproduce: Run menu "? -> Update MacPad" under Windows XP. -->
+			<GUpProxyConfNeedAdminMode title="Proxy Settings" message="Please relaunch MacPad in Admin mode to configure proxy."/>
 			<DocTooDirtyToMonitor title="Monitoring problem" message="The document is dirty. Please save the modification before monitoring it."/>
 			<DocNoExistToMonitor title="Monitoring problem" message="The file should exist to be monitored."/>
-			<FileTooBigToOpen title="File size problem" message="File is too big to be opened by Nextpad++"/><!-- HowToReproduce: Try to open a 4GB file (it's not easy to reproduce, it depends on your system). -->
+			<FileTooBigToOpen title="File size problem" message="File is too big to be opened by MacPad"/><!-- HowToReproduce: Try to open a 4GB file (it's not easy to reproduce, it depends on your system). -->
 			<FileLoadingException title="Exception code: $STR_REPLACE$" message="An error occurred while loading the file!"/>
 			<WantToOpenHugeFile title="Opening huge file warning" message="Opening a huge file of 2GB+ could take several minutes.
 Do you want to open it?"/>
@@ -2029,8 +2029,8 @@ Folder &quot;$STR_REPLACE2$&quot; doesn't exist."/>
 Do you want to save the current file anyway?"/><!-- HowToReproduce: this message prevents from system failure. It's hard to reproduce. -->
 			<LoadStylersFailed title="Load stylers.xml failed" message="Load &quot;$STR_REPLACE$&quot; failed!"/>
 			<LoadLangsFailed title="Configurator" message="Load langs.xml failed!
-Do you want to recover your langs.xml?"/><!-- HowToReproduce: Close Nextpad++. Use another editor to remove all content of "langs.xml" (0 length) then save it. Open Nextpad++. -->
-			<LoadLangsFailedFinal title="Configurator" message="Load langs.xml failed!"/><!-- HowToReproduce: Close Nextpad++. Use another editor to make "langs.xml" an invalid xml file then save it. Open Nextpad++. -->
+Do you want to recover your langs.xml?"/><!-- HowToReproduce: Close MacPad. Use another editor to remove all content of "langs.xml" (0 length) then save it. Open MacPad. -->
+			<LoadLangsFailedFinal title="Configurator" message="Load langs.xml failed!"/><!-- HowToReproduce: Close MacPad. Use another editor to make "langs.xml" an invalid xml file then save it. Open MacPad. -->
 			<FolderAsWorspaceSubfolderExists title="Folder as Workspace adding folder problem" message="A sub-folder of the folder you want to add exists.
 Please remove its root from the panel before you add folder &quot;$STR_REPLACE$&quot;."/><!-- HowToReproduce: Add a folder like "c:\temp\aFolder\" into "Folder as Workspace" panel, then try to add "c:\temp\". -->
 
@@ -2058,28 +2058,28 @@ please give another one."/>
 			<SCMapperDoDeleteOrNot title="Are you sure?" message="Are you sure you want to delete this shortcut?"/>
 			<FindCharRangeValueError title="Range Value problem" message="You should type between 0 and 255."/> <!-- HowToReproduce: Search menu, then Find characters in range, select Custom range, enter 999 in either edit box, press Find. -->
 			<OpenInAdminMode title="Save failed" message="The file cannot be saved and it may be protected.
-Do you want to launch Nextpad++ in Administrator mode?"/>
+Do you want to launch MacPad in Administrator mode?"/>
 			<OpenInAdminModeWithoutCloseCurrent title="Save failed" message="The file cannot be saved and it may be protected.
-Do you want to launch Nextpad++ in Administrator mode?"/>
-			<OpenInAdminModeFailed title="Open in Administrator mode failed" message="Nextpad++ cannot be opened in Administrator mode."/><!-- HowToReproduce: When you have no Admin privilege and you try to save a modified file in a protected location (for example: any file in sub-folder of "C:\Program Files\". This message will appear after replying "Yes" to "Open in Admin mode" dialog. -->
+Do you want to launch MacPad in Administrator mode?"/>
+			<OpenInAdminModeFailed title="Open in Administrator mode failed" message="MacPad cannot be opened in Administrator mode."/><!-- HowToReproduce: When you have no Admin privilege and you try to save a modified file in a protected location (for example: any file in sub-folder of "C:\Program Files\". This message will appear after replying "Yes" to "Open in Admin mode" dialog. -->
 			<ViewInBrowser title="View Current File in Browser" message="Application cannot be found in your system."/>
-			<ExitToUpdatePlugins title="Nextpad++ is about to exit" message="If you click YES, you will quit Nextpad++ to continue the operations.
-Nextpad++ will be restarted after all the operations are terminated.
+			<ExitToUpdatePlugins title="MacPad is about to exit" message="If you click YES, you will quit MacPad to continue the operations.
+MacPad will be restarted after all the operations are terminated.
 Continue?"/>
-			<NeedToRestartToLoadPlugins title="Nextpad++ needs to be relaunched" message="You have to restart Nextpad++ to load plugins you installed."/><!-- HowToReproduce: Import a plugin via menu "Settings->Import->Import Plugin(s)...". -->
-			<ChangeHistoryEnabledWarning title="Nextpad++ needs to be relaunched" message="You have to restart Nextpad++ to enable Change History."/><!-- HowToReproduce: uncheck "Display Change History" via Preferences dialog "Marges/Border/Edge. -->
-			<WindowsSessionExit title="Nextpad++ - Windows session exit" message="Windows session is about to be terminated but you have some data unsaved. Do you want to exit Nextpad++ now?"/>
+			<NeedToRestartToLoadPlugins title="MacPad needs to be relaunched" message="You have to restart MacPad to load plugins you installed."/><!-- HowToReproduce: Import a plugin via menu "Settings->Import->Import Plugin(s)...". -->
+			<ChangeHistoryEnabledWarning title="MacPad needs to be relaunched" message="You have to restart MacPad to enable Change History."/><!-- HowToReproduce: uncheck "Display Change History" via Preferences dialog "Marges/Border/Edge. -->
+			<WindowsSessionExit title="MacPad - Windows session exit" message="Windows session is about to be terminated but you have some data unsaved. Do you want to exit MacPad now?"/>
 			<LanguageMenuCompactWarning title="Compact Language Menu" message="This option will be changed on the next launch."/><!-- HowToReproduce: toggle "Make language menu compact" via Preferences dialog "Language/Language Menu. -->
 			<SwitchUnsavedThemeWarning title="$STR_REPLACE$" message="Unsaved changes are about to be discarded!
 Do you want to save your changes before switching themes?"/><!-- HowToReproduce: In the Style Configurator dialog change some theme and switch to other theme without saving. -->
-			<MacroAndRunCmdlWarning title="Macro and Run Commands Compatibility" message="Your Macro and Run commands saved in Nextpad++ v.8.5.2 (or older) may not be compatible with the current version of Nextpad++.
+			<MacroAndRunCmdlWarning title="Macro and Run Commands Compatibility" message="Your Macro and Run commands saved in MacPad v.8.5.2 (or older) may not be compatible with the current version of MacPad.
 Please test those commands and, if needed, re-edit them.
 
-Alternatively, you can downgrade to Nextpad++ v8.5.2 and restore your previous data.
-Nextpad++ will backup your old &quot;shortcuts.xml&quot; and save it as &quot;shortcuts.xml.v8.5.2.backup&quot;.
-Renaming &quot;shortcuts.xml.v8.5.2.backup&quot; -&gt; &quot;shortcuts.xml&quot;, your commands should be restored and work properly."/><!-- HowToReproduce: Close Nextpad++, remove shortcuts.xml.v8.5.2.backup & v852ShortcutsCompatibilityWarning.xml if present, relaunch Nextpad++, delete or modify a shortcuts via Shortcut Mapper, close Nextpad++, then the message will show up -->
+Alternatively, you can downgrade to MacPad v8.5.2 and restore your previous data.
+MacPad will backup your old &quot;shortcuts.xml&quot; and save it as &quot;shortcuts.xml.v8.5.2.backup&quot;.
+Renaming &quot;shortcuts.xml.v8.5.2.backup&quot; -&gt; &quot;shortcuts.xml&quot;, your commands should be restored and work properly."/><!-- HowToReproduce: Close MacPad, remove shortcuts.xml.v8.5.2.backup & v852ShortcutsCompatibilityWarning.xml if present, relaunch MacPad, delete or modify a shortcuts via Shortcut Mapper, close MacPad, then the message will show up -->
 			<FullReadOnlySavingForbidden title="Save failed" message="Cannot save file.
-The Nextpad++ full read-only saving forbidden mode prevented the file from being saved."/>
+The MacPad full read-only saving forbidden mode prevented the file from being saved."/>
 			<NotEnoughRoom4Saving title="Save failed" message="Failed to save file.
 It seems there's not enough space on disk to save file. Your file is not saved."/>
 			<FileInaccessibleUserSession title="File inaccessible" message="Some files from your manually-saved session &quot;$STR_REPLACE$&quot; are inaccessible. They can be opened as empty and read-only documents as placeholders.
@@ -2092,8 +2092,8 @@ NOTE: Choosing not to create the placeholders or closing them later, your manual
 Would you like to create those placeholders?
 
 NOTE: Choosing not to create the placeholders or closing them later, your session WILL BE MODIFIED ON EXIT! We suggest you backup your &quot;session.xml&quot; now."/>
-			<RTLvsDirectWrite title="Cannot run RTL" message="RTL is not compatible with DirectWrite mode. Please disable DirectWrite mode in MISC. section of Preferences dialog, and restart Nextpad++."/>
-			<FileMemoryAllocationFailed title="Exception: File memory allocation failed" message="There is probably not enough contiguous free memory for the file being loaded by Nextpad++."/><!-- HowToReproduce: Try to open multiple files with total size > ~700MB in the x86 Nextpad++ (it will depend on the PC memory configuration and the current system memory usage...). -->
+			<RTLvsDirectWrite title="Cannot run RTL" message="RTL is not compatible with DirectWrite mode. Please disable DirectWrite mode in MISC. section of Preferences dialog, and restart MacPad."/>
+			<FileMemoryAllocationFailed title="Exception: File memory allocation failed" message="There is probably not enough contiguous free memory for the file being loaded by MacPad."/><!-- HowToReproduce: Try to open multiple files with total size > ~700MB in the x86 MacPad (it will depend on the PC memory configuration and the current system memory usage...). -->
 			<FindRegexBackwardDisabled title="Regex backward search disabled" message="By default, backward regex searching is disabled due to potentially unexpected results. To perform a backward search, open the Find dialog and select either normal or extended search mode instead of regular expression.
 Press the OK button to open the Find dialog or set focus on it.
 			
@@ -2101,8 +2101,8 @@ If you require the backward regex searching feature, consult the user manual for
 			<PrintError title="0" message="Cannot start printer document."/><!-- Use title="0" to use Windows OS default translated "Error" title. -->
 			<FindAutoChangeOfInSelectionWarning title="Search warning" message="The &quot;In selection&quot; checkbox state has been automatically modified.
 Please verify the search condition before performing the action."/> <!-- HowToReproduce: https://github.com/notepad-plus-plus/notepad-plus-plus/issues/14897#issuecomment-2564316224 -->
-			<Need2Restart2ShowMenuShortcuts title="Nextpad++ needs to be restarted" message="Nextpad++ needs to be restarted to show right menu shortcuts."/>
-			<NoAdminRight2ChangeReadOnlyFileAttribute title="Changing file read-only attribute failed" message="Please run Nextpad++ as administrator to change the file attributes."/>
+			<Need2Restart2ShowMenuShortcuts title="MacPad needs to be restarted" message="MacPad needs to be restarted to show right menu shortcuts."/>
+			<NoAdminRight2ChangeReadOnlyFileAttribute title="Changing file read-only attribute failed" message="Please run MacPad as administrator to change the file attributes."/>
 		</MessageBox>
 		<ClipboardHistory>
 			<PanelTitle name="Clipboard History"/>
@@ -2222,8 +2222,8 @@ Please verify the search condition before performing the action."/> <!-- HowToRe
 			<word-chars-list-warning-end value="  in your character list."/><!-- HowToReproduce: In "Delimiter" section of Preferences dialog, check "Add your character as part of word\r(don't choose it unless you know what you're doing)", then type a white-space in the text field. -->
 			<backup-select-folder value="Select a folder as backup directory"/><!-- HowToReproduce: Settings > Preferences > Backup > [...] -->
 			<cloud-invalid-warning value="Invalid path."/>
-			<cloud-restart-warning value="Please restart Nextpad++ to take effect."/>
-			<cloud-select-folder value="Select a folder from/to where Nextpad++ reads/writes its settings"/><!-- HowToReproduce: In "Cloud" section of Preferences dialog, check "Set your cloud location path here: ", then click the button "...". This message is displayed in the "Browse For Folder" dialog. -->
+			<cloud-restart-warning value="Please restart MacPad to take effect."/>
+			<cloud-select-folder value="Select a folder from/to where MacPad reads/writes its settings"/><!-- HowToReproduce: In "Cloud" section of Preferences dialog, check "Set your cloud location path here: ", then click the button "...". This message is displayed in the "Browse For Folder" dialog. -->
 			<default-open-save-select-folder value="Select a folder as default directory"/><!-- HowToReproduce: Settings > Preferences > Default Directory > [...] -->
 			<shift-change-direction-tip value="Use Shift+Enter to search in the opposite direction"/>
 			<two-find-buttons-tip value="2 find buttons mode"/>
@@ -2382,7 +2382,7 @@ If you select advanced mode but do not edit files in the aforementioned language
 
 			<!-- Don't translate "Global override" and "Default Style" -->
 			<global-override-tip value="Enabling &quot;Global override&quot; here will override that parameter in all language styles. What you probably really want is to use the &quot;Default Style&quot; settings instead"/>
-			<scintillaRenderingTechnology-tip value="May improve rendering of special characters or resolve some graphics issues, restart Nextpad++ to apply the changes."/>
+			<scintillaRenderingTechnology-tip value="May improve rendering of special characters or resolve some graphics issues, restart MacPad to apply the changes."/>
 
 			<!-- Due to the limited space on the status bar, if the translations for 'length' & 'lines' are much longer than the English words, please leave them in English instead of translating them. -->
 			<statusbar-length-lines value="length: $STR_REPLACE1$    lines: $STR_REPLACE2$"/>

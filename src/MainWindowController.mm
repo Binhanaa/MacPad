@@ -90,7 +90,7 @@
 
 static NSString *const kWindowFrameKey = @"MainWindowFrame";
 
-// ── Config paths (mirrors %APPDATA%\Nextpad++ on Windows) ────────────────────
+// ── Config paths (mirrors %APPDATA%\MacPad on Windows) ────────────────────
 // Base dir is ~/Library/Application Support/Nextpad++ (see NppPaths.h); legacy
 // ~/.nextpad++ installs are migrated on first use.
 static NSString *nppConfigDir(void) {
@@ -2108,7 +2108,7 @@ static void _nppTahoeRoundEditorCard(NSView *container, NSView *content) {
                              NSWindowStyleMaskResizable)
                     backing:NSBackingStoreBuffered
                       defer:NO];
-    window.title = @"Nextpad";
+    window.title = @"MacPad";
     window.minSize = NSMakeSize(480, 320);
     [window center];
 
@@ -4535,7 +4535,7 @@ static BOOL groupHasTrailingSep(NSString *ident) {
     // those on the next launch and the following successful save would prune them
     // as strays. Keeping them costs disk; deleting them costs the user's text.
     if (![session writeToFile:nppSessionPath() atomically:YES]) {
-        NSLog(@"[Nextpad++] could not write %@ — skipping the backup prune so this "
+        NSLog(@"[MacPad] could not write %@ — skipping the backup prune so this "
               @"session's backups survive for manual recovery", nppSessionPath());
         manifestWriteFailed = YES;
     } else if (tabs.count > 0) {
@@ -4610,12 +4610,12 @@ static BOOL groupHasTrailingSep(NSString *ident) {
     }
 
     if (previous.length && [[NSFileManager defaultManager] fileExistsAtPath:previous]) {
-        NSLog(@"[Nextpad++] backup write failed for \"%@\" — the session will restore "
+        NSLog(@"[MacPad] backup write failed for \"%@\" — the session will restore "
               @"the older snapshot at %@", ed.displayName, previous);
         return previous;
     }
 
-    NSLog(@"[Nextpad++] backup write failed for \"%@\" and it has no earlier backup; "
+    NSLog(@"[MacPad] backup write failed for \"%@\" and it has no earlier backup; "
           @"its unsaved changes are not protected", ed.displayName);
     return nil;
 }
@@ -4829,7 +4829,7 @@ static BOOL groupHasTrailingSep(NSString *ident) {
         EditorView *ed = [_tabManager addNewTab];
         NSError *err;
         if (![ed loadFileAtPath:full error:&err]) {
-            NSLog(@"[Nextpad++] could not recover backup %@: %@", full, err);
+            NSLog(@"[MacPad] could not recover backup %@: %@", full, err);
             [_tabManager closeEditor:ed];
             continue;
         }
@@ -4850,7 +4850,7 @@ static BOOL groupHasTrailingSep(NSString *ident) {
         nppNoteKnownBackup(full);
         [fm setAttributes:@{ NSFileModificationDate: [NSDate date] } ofItemAtPath:full error:nil];
         [_tabManager refreshCurrentTabTitle];
-        NSLog(@"[Nextpad++] recovered unsaved backup %@", full);
+        NSLog(@"[MacPad] recovered unsaved backup %@", full);
         recovered++;
     }
     return recovered;
@@ -7839,7 +7839,7 @@ static NSArray<NSDictionary *> *convertRecordedToXmlFormat(NSArray<NSDictionary 
 /// Issue #72 — universal-in-window zoom. After the focused editor's zoom
 /// changes, force every other editor in this window to the same zoom so
 /// switching tabs (and split-view editors) doesn't surprise the user with
-/// a different size. Matches Nextpad++ Windows behaviour.
+/// a different size. Matches MacPad Windows behaviour.
 ///
 /// Scoped to ONE window: separate MainWindowController instances each
 /// fan-out within their own three tab managers only. That keeps a "small
@@ -9505,8 +9505,8 @@ typedef NS_ENUM(NSInteger, NppBatchCloseDecision) {
         { @"NAME_PART",          @"File name without extension" },
         { @"EXT_PART",           @"File extension (with .)" },
         { @"CURRENT_WORD",       @"Selected word or word under caret" },
-        { @"NPP_DIRECTORY",      @"Nextpad++.app directory" },
-        { @"NPP_FULL_FILE_PATH", @"Full path of Nextpad++.app" },
+        { @"NPP_DIRECTORY",      @"MacPad.app directory" },
+        { @"NPP_FULL_FILE_PATH", @"Full path of MacPad.app" },
         { @"CURRENT_LINE",       @"Line number of caret" },
         { @"CURRENT_COLUMN",     @"Column number of caret" },
         { @"CURRENT_LINESTR",    @"Current line text" },
@@ -10276,11 +10276,11 @@ typedef NS_ENUM(NSInteger, NppBatchCloseDecision) {
     NppLocalizer *loc = [NppLocalizer shared];
     NSAlert *a = [[NSAlert alloc] init];
     a.messageText = [loc translate:@"Editing contextMenu"];
-    a.informativeText = [loc translate:@"Editing contextMenu.xml allows you to modify your Nextpad++ popup context menu on edit zone.\nYou have to restart your Nextpad++ to take effect after modifying contextMenu.xml."];
+    a.informativeText = [loc translate:@"Editing contextMenu.xml allows you to modify your MacPad popup context menu on edit zone.\nYou have to restart your MacPad to take effect after modifying contextMenu.xml."];
     [a addButtonWithTitle:[loc translate:@"OK"]];
     [a runModal];
 
-    // Open ~/Library/Application Support/Nextpad++/contextMenu.xml for editing in Nextpad++ itself
+    // Open ~/Library/Application Support/Nextpad++/contextMenu.xml for editing in MacPad itself
     NSString *ctxPath = [nppConfigDir() stringByAppendingPathComponent:@"contextMenu.xml"];
     if ([[NSFileManager defaultManager] fileExistsAtPath:ctxPath]) {
         [self openFileAtPath:ctxPath];
@@ -10317,7 +10317,7 @@ typedef NS_ENUM(NSInteger, NppBatchCloseDecision) {
     tv.font = [NSFont fontWithName:@"Menlo" size:11];
     tv.string =
         @"Usage:\n\n"
-        @"nextpad++ [--help] [-multiInst] [-noPlugin] [-lLanguage] [-udl=\"My UDL Name\"]\n"
+        @"macpad [--help] [-multiInst] [-noPlugin] [-lLanguage] [-udl=\"My UDL Name\"]\n"
         @"[-LlangCode] [-nLineNumber] [-cColumnNumber] [-pPosition] [-xLeftPos] [-yTopPos]\n"
         @"[-monitor] [-nosession] [-notabbar] [-loadingTime] [-alwaysOnTop]\n"
         @"[-ro] [-fullReadOnly] [-fullReadOnlySavingForbidden] [-openSession] [-r]\n"
@@ -10326,26 +10326,26 @@ typedef NS_ENUM(NSInteger, NppBatchCloseDecision) {
         @"[-openFoldersAsWorkspace] [-titleAdd=\"additional title bar text\"]\n"
         @"[filePath]\n\n"
         @"--help: This help message\n"
-        @"-multiInst: Launch another Nextpad++ instance\n"
-        @"-noPlugin: Launch Nextpad++ without loading any plugin\n"
+        @"-multiInst: Launch another MacPad instance\n"
+        @"-noPlugin: Launch MacPad without loading any plugin\n"
         @"-l: Open file or Ghost type with syntax highlighting of choice\n"
         @"-udl=\"My UDL Name\": Open file by applying User Defined Language\n"
         @"-L: Apply indicated localization, langCode is browser language code\n"
         @"-n: Scroll to indicated line on filePath\n"
         @"-c: Scroll to indicated column on filePath\n"
         @"-p: Scroll to indicated position on filePath\n"
-        @"-x: Move Nextpad++ to indicated left side position on the screen\n"
-        @"-y: Move Nextpad++ to indicated top position on the screen\n"
+        @"-x: Move MacPad to indicated left side position on the screen\n"
+        @"-y: Move MacPad to indicated top position on the screen\n"
         @"-monitor: Open file with file monitoring enabled\n"
-        @"-nosession: Launch Nextpad++ without previous session\n"
-        @"-notabbar: Launch Nextpad++ without tab bar\n"
+        @"-nosession: Launch MacPad without previous session\n"
+        @"-notabbar: Launch MacPad without tab bar\n"
         @"-ro: Make the filePath read-only\n"
         @"-fullReadOnly: Open all files read-only by default, toggling the R/O off\n"
         @"  and saving is allowed\n"
         @"-fullReadOnlySavingForbidden: Open all files read-only by default,\n"
         @"  toggling the R/O off and saving is disabled\n"
-        @"-loadingTime: Display Nextpad++ loading time\n"
-        @"-alwaysOnTop: Make Nextpad++ always on top\n"
+        @"-loadingTime: Display MacPad loading time\n"
+        @"-alwaysOnTop: Make MacPad always on top\n"
         @"-openSession: Open a session. filePath must be a session file\n"
         @"-r: Open files recursively. This argument will be ignored if filePath\n"
         @"  contains no wildcard character\n"
@@ -10353,10 +10353,10 @@ typedef NS_ENUM(NSInteger, NppBatchCloseDecision) {
         @"-qt=\"text to display.\": Ghost type the given text\n"
         @"-qf=\"/path/quote.txt\": Ghost type a file content via the file path\n"
         @"-qSpeed: Ghost typing speed. Value from 1 to 3 for slow, fast and fastest\n"
-        @"-quickPrint: Print the file given as argument then quit Nextpad++\n"
+        @"-quickPrint: Print the file given as argument then quit MacPad\n"
         @"-settingsDir=\"/your settings dir/\": Override the default settings dir\n"
         @"-openFoldersAsWorkspace: Open filePath of folder(s) as workspace\n"
-        @"-titleAdd=\"string\": Add string to Nextpad++ title bar\n"
+        @"-titleAdd=\"string\": Add string to MacPad title bar\n"
         @"filePath: File or folder name to open (absolute or relative path name).\n"
         @"  Passing a folder opens every file directly inside it (top level "
         @"only — subfolders and hidden files are skipped). Use -r to recurse "
@@ -10366,22 +10366,22 @@ typedef NS_ENUM(NSInteger, NppBatchCloseDecision) {
         @"implemented: -L, -settingsDir, and the Ghost-typing flags "
         @"(-qn / -qt / -qf / -qSpeed). The -fullReadOnly and "
         @"-fullReadOnlySavingForbidden flags currently behave like -ro.\n\n"
-        @"To use the 'nextpad++' command shown above, run "
-        @"App menu > 'Install nextpad++ Command Line Tool…'.\n\n"
+        @"To use the 'macpad' command shown above, run "
+        @"App menu > 'Install MacPad Command Line Tool…'.\n\n"
         @"Same-instance behaviour:\n"
-        @"• Passing files only — e.g. 'nextpad++ a.txt b.txt' — opens them "
-        @"as new tabs in the Nextpad++ window that is already running.\n"
-        @"• Passing a folder — e.g. 'nextpad++ myfolder' — opens that "
+        @"• Passing files only — e.g. 'macpad a.txt b.txt' — opens them "
+        @"as new tabs in the MacPad window that is already running.\n"
+        @"• Passing a folder — e.g. 'macpad myfolder' — opens that "
         @"folder's top-level files as tabs in the running window. Opening "
         @"more than 20 files at once asks for confirmation first.\n"
         @"• Passing any option flag (-n42, -lcpp, …) starts a fresh "
-        @"Nextpad++ instance: flags are only applied at launch and cannot "
+        @"MacPad instance: flags are only applied at launch and cannot "
         @"be delivered to an already-running window.\n\n"
         @"Without the installed command you can still launch via:\n"
-        @"  open -a Nextpad++ file.txt          (opens in running instance)\n"
-        @"  open -a Nextpad++ --args -n42 file.txt   (flags — fresh launch)\n"
+        @"  open -a MacPad file.txt          (opens in running instance)\n"
+        @"  open -a MacPad --args -n42 file.txt   (flags — fresh launch)\n"
         @"or invoke the binary directly:\n"
-        @"  /Applications/Nextpad++.app/Contents/MacOS/Nextpad++ file.txt";
+        @"  /Applications/MacPad.app/Contents/MacOS/MacPad file.txt";
 
     scroll.documentView = tv;
     [panel.contentView addSubview:scroll];
@@ -10420,7 +10420,7 @@ static NSString *_shellQuote(NSString *path) {
     return [NSString stringWithFormat:@"'%@'", escaped];
 }
 
-// Build the bash wrapper script that gets installed as `nextpad++`. Routes
+// Build the bash wrapper script that gets installed as `macpad`. Routes
 // through `open -a` (LaunchServices) so the existing app instance is reused
 // and the terminal returns immediately — direct exec of the Mach-O binary
 // would attach NSLog to the user's terminal and leave it stuck. Relative
@@ -10430,9 +10430,9 @@ static NSString *_shellQuote(NSString *path) {
 static NSString *_makeCLIScriptForApp(NSString *appPath) {
     return [NSString stringWithFormat:
         @"#!/bin/bash\n"
-         "# nextpad++ — CLI wrapper for Nextpad++ macOS\n"
-         "# Auto-generated by Nextpad++.app — re-run the\n"
-         "# 'Install nextpad++ Command Line Tool…' menu item to update.\n"
+         "# macpad — CLI wrapper for MacPad macOS\n"
+         "# Auto-generated by MacPad.app — re-run the\n"
+         "# 'Install MacPad Command Line Tool…' menu item to update.\n"
          "APP=%@\n"
          "\n"
          "# Split arguments into option flags (-…) and file/folder paths.\n"
@@ -10480,7 +10480,7 @@ static BOOL _writeCLIScript(NSString *script, NSString *path, NSError **outErr) 
                        error:outErr];
 }
 
-// Creates /usr/local/bin/nextpad++ as a wrapper script that dispatches to the
+// Creates /usr/local/bin/macpad as a wrapper script that dispatches to the
 // running app via `open -a`. Earlier versions installed a direct symlink to
 // the Mach-O binary, which inherited the terminal's stdio (NSLog flooded the
 // terminal, prompt didn't return, didn't reuse the running app instance).
@@ -10490,7 +10490,7 @@ static BOOL _writeCLIScript(NSString *script, NSString *path, NSError **outErr) 
     NSString *appPath = [NSBundle mainBundle].bundlePath;
     if (!appPath.length) return;
 
-    NSString *systemTarget = @"/usr/local/bin/nextpad++";
+    NSString *systemTarget = @"/usr/local/bin/macpad";
     NSFileManager *fm = [NSFileManager defaultManager];
     NSString *script = _makeCLIScriptForApp(appPath);
 
@@ -10503,7 +10503,7 @@ static BOOL _writeCLIScript(NSString *script, NSString *path, NSError **outErr) 
     if (existing && [existing isEqualToString:script]) {
         NSAlert *a = [[NSAlert alloc] init];
         a.messageText = [[NppLocalizer shared] translate:@"Already installed"];
-        a.informativeText = [NSString stringWithFormat:@"nextpad++ is already installed at %@\n\nUsage:\n  nextpad++ file.txt\n  nextpad++ -n42 main.cpp", systemTarget];
+        a.informativeText = [NSString stringWithFormat:@"macpad is already installed at %@\n\nUsage:\n  macpad file.txt\n  macpad -n42 main.cpp", systemTarget];
         [a runModal];
         return;
     }
@@ -10516,9 +10516,9 @@ static BOOL _writeCLIScript(NSString *script, NSString *path, NSError **outErr) 
     if (!ok) {
         // Need admin. Offer two paths.
         NSAlert *prompt = [[NSAlert alloc] init];
-        prompt.messageText = [[NppLocalizer shared] translate:@"Install nextpad++ Command Line Tool"];
+        prompt.messageText = [[NppLocalizer shared] translate:@"Install MacPad Command Line Tool"];
         prompt.informativeText = [NSString stringWithFormat:
-            @"Where would you like to install the 'nextpad++' command?\n\n"
+            @"Where would you like to install the 'macpad' command?\n\n"
              "• /usr/local/bin (in default PATH — requires administrator password)\n"
              "• ~/.local/bin (no password — you may need to add it to your PATH)"];
         [prompt addButtonWithTitle:@"/usr/local/bin"];
@@ -10533,7 +10533,7 @@ static BOOL _writeCLIScript(NSString *script, NSString *path, NSError **outErr) 
             // privilege-escalate just the move + chmod. Avoids embedding
             // multi-line script content inside a single AppleScript shell
             // command, which would need fragile heredoc/escape gymnastics.
-            NSString *tmpPath = [NSString stringWithFormat:@"/tmp/nextpad++.cli.%d",
+            NSString *tmpPath = [NSString stringWithFormat:@"/tmp/macpad.cli.%d",
                                  (int)getpid()];
             NSError *werr = nil;
             if (![script writeToFile:tmpPath atomically:YES
@@ -10558,7 +10558,7 @@ static BOOL _writeCLIScript(NSString *script, NSString *path, NSError **outErr) 
                 a.informativeText = errInfo[NSAppleScriptErrorMessage] ?: @"Unknown error.";
             } else {
                 a.messageText = [[NppLocalizer shared] translate:@"Installed"];
-                a.informativeText = [NSString stringWithFormat:@"nextpad++ command installed at %@\n\nUsage:\n  nextpad++ file.txt\n  nextpad++ -n42 main.cpp", systemTarget];
+                a.informativeText = [NSString stringWithFormat:@"macpad command installed at %@\n\nUsage:\n  macpad file.txt\n  macpad -n42 main.cpp", systemTarget];
             }
             [a runModal];
             return;
@@ -10567,7 +10567,7 @@ static BOOL _writeCLIScript(NSString *script, NSString *path, NSError **outErr) 
         // resp == NSAlertSecondButtonReturn — fallback to ~/.local/bin
         NSString *userBinDir = [NSHomeDirectory() stringByAppendingPathComponent:@".local/bin"];
         [fm createDirectoryAtPath:userBinDir withIntermediateDirectories:YES attributes:nil error:nil];
-        NSString *userTarget = [userBinDir stringByAppendingPathComponent:@"nextpad++"];
+        NSString *userTarget = [userBinDir stringByAppendingPathComponent:@"macpad"];
         err = nil;
         ok = _writeCLIScript(script, userTarget, &err);
 
@@ -10586,7 +10586,7 @@ static BOOL _writeCLIScript(NSString *script, NSString *path, NSError **outErr) 
         if (onPath) {
             NSAlert *a = [[NSAlert alloc] init];
             a.messageText = [[NppLocalizer shared] translate:@"Installed"];
-            a.informativeText = [NSString stringWithFormat:@"nextpad++ command installed at %@\n\nUsage:\n  nextpad++ file.txt\n  nextpad++ -n42 main.cpp", userTarget];
+            a.informativeText = [NSString stringWithFormat:@"macpad command installed at %@\n\nUsage:\n  macpad file.txt\n  macpad -n42 main.cpp", userTarget];
             [a runModal];
             return;
         }
@@ -10614,7 +10614,7 @@ static BOOL _writeCLIScript(NSString *script, NSString *path, NSError **outErr) 
         a.messageText = [[NppLocalizer shared] translate:
             @"Installed — but ~/.local/bin is not on your PATH"];
         a.informativeText = [NSString stringWithFormat:
-            @"nextpad++ is installed at %@, but typing 'nextpad++' in a "
+            @"macpad is installed at %@, but typing 'macpad' in a "
              "terminal will give 'command not found' until ~/.local/bin is "
              "on your $PATH.\n\n"
              "Add this line to %@:\n\n"
@@ -10641,7 +10641,7 @@ static BOOL _writeCLIScript(NSString *script, NSString *path, NSError **outErr) 
             } else {
                 NSString *prefix = current.length && ![current hasSuffix:@"\n"] ? @"\n" : @"";
                 NSString *appended = [current stringByAppendingFormat:
-                    @"%@\n# Added by Nextpad++ — nextpad++ CLI\n%@\n",
+                    @"%@\n# Added by MacPad — macpad CLI\n%@\n",
                     prefix, exportLine];
                 NSError *werr = nil;
                 BOOL wrote = [appended writeToFile:configPath
@@ -10652,7 +10652,7 @@ static BOOL _writeCLIScript(NSString *script, NSString *path, NSError **outErr) 
                     follow.messageText = [[NppLocalizer shared] translate:@"Added to PATH"];
                     follow.informativeText = [NSString stringWithFormat:
                         @"Added the export line to %@. Open a new Terminal "
-                         "window for it to take effect — then 'nextpad++' "
+                         "window for it to take effect — then 'macpad' "
                          "will work.", configDisplay];
                 } else {
                     follow.alertStyle = NSAlertStyleCritical;
@@ -10679,7 +10679,7 @@ static BOOL _writeCLIScript(NSString *script, NSString *path, NSError **outErr) 
     // Plain (non-elevated) install succeeded — user owns /usr/local/bin.
     NSAlert *a = [[NSAlert alloc] init];
     a.messageText = [[NppLocalizer shared] translate:@"Installed"];
-    a.informativeText = [NSString stringWithFormat:@"nextpad++ command installed at %@\n\nUsage:\n  nextpad++ file.txt\n  nextpad++ -n42 main.cpp", systemTarget];
+    a.informativeText = [NSString stringWithFormat:@"macpad command installed at %@\n\nUsage:\n  macpad file.txt\n  macpad -n42 main.cpp", systemTarget];
     [a runModal];
 }
 
@@ -10955,10 +10955,10 @@ static BOOL _writeCLIScript(NSString *script, NSString *path, NSError **outErr) 
 #pragma mark - Help / Debug
 
 - (void)openNppHome:(id)sender {
-    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://nextpad.org"]];
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://github.com/Binhanaa/MacPad"]];
 }
 - (void)openNppProjectPage:(id)sender {
-    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://github.com/nextpad-plus-plus"]];
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://github.com/Binhanaa/MacPad"]];
 }
 - (void)openNppManual:(id)sender {
     [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://npp-user-manual.org"]];
@@ -10995,7 +10995,7 @@ static int64_t _sysctlInt(const char *name) {
 #endif
 
     // ── App Info ─────────────────────────────────────────────────────────
-    [info appendFormat:@"Nextpad++ macOS v%@ (build %@)   (%@)\n", version, buildNum, archStr];
+    [info appendFormat:@"MacPad v%@ (build %@)   (%@)\n", version, buildNum, archStr];
     [info appendFormat:@"Build time: %s - %s\n", __DATE__, __TIME__];
     [info appendFormat:@"Built with: Apple Clang %d.%d.%d\n",
         __clang_major__, __clang_minor__, __clang_patchlevel__];
@@ -11347,7 +11347,7 @@ static int64_t _sysctlInt(const char *name) {
     EditorView *ed = [self currentEditor];
     NSString *name;
     if (!ed) {
-        name = @"Nextpad++";
+        name = @"MacPad";
     } else if ([[NSUserDefaults standardUserDefaults] boolForKey:kPrefShowFullPathInTitle] && ed.filePath) {
         name = ed.filePath;
     } else {

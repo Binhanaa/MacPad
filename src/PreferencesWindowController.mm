@@ -2615,7 +2615,7 @@ static NSDictionary<NSString *, NSString *> *_langDisplayNames() {
             NSAlert *alert = [[NSAlert alloc] init];
             alert.messageText = [[NppLocalizer shared] translate:@"Toolbar icon size changed"];
             alert.informativeText = [[NppLocalizer shared] translate:
-                @"The new toolbar icon size will take effect the next time Nextpad++ launches."];
+                @"The new toolbar icon size will take effect the next time MacPad launches."];
             [alert addButtonWithTitle:[[NppLocalizer shared] translate:@"OK"]];
             [alert runModal];
             break;

@@ -493,24 +493,34 @@ int SurfaceImpl::SupportsFeature(Supports feature) noexcept {
 
 //--------------------------------------------------------------------------------------------------
 
+static CGColorRef SRGBColor(ColourRGBA c) {
+	CGColorSpaceRef space = CGColorSpaceCreateWithName(kCGColorSpaceSRGB);
+	const CGFloat comps[4] = {
+		c.GetRedComponent(),
+		c.GetGreenComponent(),
+		c.GetBlueComponent(),
+		c.GetAlphaComponent()
+	};
+	CGColorRef color = CGColorCreate(space, comps);
+	CGColorSpaceRelease(space);
+	return color;
+}
+
 void SurfaceImpl::FillColour(ColourRGBA fill) {
-	// Set the Fill color to match
-	CGContextSetRGBFillColor(gc,
-				 fill.GetRedComponent(),
-				 fill.GetGreenComponent(),
-				 fill.GetBlueComponent(),
-				 fill.GetAlphaComponent());
+	// Theme bytes are sRGB. The window context is often Display P3, and
+	// CGContextSetRGBFillColor would interpret those bytes in P3, which
+	// lightens dark grays.
+	CGColorRef color = SRGBColor(fill);
+	CGContextSetFillColorWithColor(gc, color);
+	CGColorRelease(color);
 }
 
 //--------------------------------------------------------------------------------------------------
 
 void SurfaceImpl::PenColourAlpha(ColourRGBA fore) {
-	// Set the Stroke color to match
-	CGContextSetRGBStrokeColor(gc,
-				   fore.GetRedComponent(),
-				   fore.GetGreenComponent(),
-				   fore.GetBlueComponent(),
-				   fore.GetAlphaComponent());
+	CGColorRef color = SRGBColor(fore);
+	CGContextSetStrokeColorWithColor(gc, color);
+	CGColorRelease(color);
 }
 
 //--------------------------------------------------------------------------------------------------

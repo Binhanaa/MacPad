@@ -734,10 +734,20 @@ SelectionPosition EditView::SPositionFromLocation(Surface *surface, const EditMo
 			// The line is drawn shifted so its right edge meets the text area.
 			// PositionFromX is measured from the left of that line, so undo
 			// the same shift before either hit-test path.
+			XYPOSITION lineWidth = 0;
 			if (model.BidirectionalR2L()) {
-				const XYPOSITION lineWidth = ll->positions[rangeSubLine.end] - subLineStart;
+				lineWidth = ll->positions[rangeSubLine.end] - subLineStart;
 				const XYPOSITION textAreaWidth = rcClient.right - vs.rightMarginWidth - vs.textStart;
 				pt.x -= (textAreaWidth - lineWidth);
+			}
+			// The right-align shift puts the line against the right edge, but
+			// Core Text measures that line from the opposite end. Without this
+			// mirror, a click on the right-hand word selects the left-hand word.
+			if (model.BidirectionalEnabled() && lineWidth > 0) {
+				XYPOSITION local = pt.x;
+				if (local < 0) local = 0;
+				if (local > lineWidth) local = lineWidth;
+				pt.x = lineWidth - local;
 			}
 			Sci::Position positionInLine = 0;
 			if (model.BidirectionalEnabled()) {

@@ -1,54 +1,26 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="face" x1="0" y1="240" x2="0" y2="820" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.42" stop-color="#F3F3F3"/>
+      <stop offset="1" stop-color="#C6C6C6"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="250" x2="0" y2="840" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8E8E8E"/>
+      <stop offset="1" stop-color="#2A2A2A"/>
+    </linearGradient>
+  </defs>
   <rect width="1024" height="1024" fill="#000000"/>
-  <g fill="#ffffff" fill-opacity="0.14" font-family="ui-monospace, Menlo, monospace" font-size="26">
-    <text x="64" y="110">{}</text>
-    <text x="204" y="110">-></text>
-    <text x="344" y="110">=></text>
-    <text x="484" y="110">if</text>
-    <text x="624" y="110">//</text>
-    <text x="764" y="110">::</text>
-    <text x="904" y="110">fn</text>
-    <text x="64" y="210">fn</text>
-    <text x="204" y="210">()</text>
-    <text x="344" y="210">[]</text>
-    <text x="484" y="210">{}</text>
-    <text x="624" y="210">-></text>
-    <text x="764" y="210">=></text>
-    <text x="904" y="210">if</text>
-    <text x="64" y="310">if</text>
-    <text x="204" y="310">//</text>
-    <text x="764" y="310">[]</text>
-    <text x="904" y="310">{}</text>
-    <text x="64" y="410">{}</text>
-    <text x="204" y="410">-></text>
-    <text x="764" y="410">::</text>
-    <text x="904" y="410">fn</text>
-    <text x="64" y="510">fn</text>
-    <text x="204" y="510">()</text>
-    <text x="764" y="510">=></text>
-    <text x="904" y="510">if</text>
-    <text x="64" y="610">if</text>
-    <text x="204" y="610">//</text>
-    <text x="764" y="610">[]</text>
-    <text x="904" y="610">{}</text>
-    <text x="64" y="710">{}</text>
-    <text x="204" y="710">-></text>
-    <text x="764" y="710">::</text>
-    <text x="904" y="710">fn</text>
-    <text x="64" y="810">fn</text>
-    <text x="204" y="810">()</text>
-    <text x="344" y="810">[]</text>
-    <text x="484" y="810">{}</text>
-    <text x="624" y="810">-></text>
-    <text x="764" y="810">=></text>
-    <text x="904" y="810">if</text>
-    <text x="64" y="910">if</text>
-    <text x="204" y="910">//</text>
-    <text x="344" y="910">::</text>
-    <text x="484" y="910">fn</text>
-    <text x="624" y="910">()</text>
-    <text x="764" y="910">[]</text>
-    <text x="904" y="910">{}</text>
+  <g fill="#ffffff" fill-opacity="0.10" font-family="ui-monospace, Menlo, monospace" font-size="22">
+    <text x="48" y="78">{}</text>
+    <text x="210" y="78">=&gt;</text>
+    <text x="820" y="78">//</text>
+    <text x="48" y="960">fn</text>
+    <text x="210" y="960">[]</text>
+    <text x="820" y="960">-&gt;</text>
+    <text x="48" y="512">if</text>
+    <text x="940" y="512">::</text>
   </g>
-  <path d="M372 744 L372 280 L512 500 L652 280 L652 744" fill="none" stroke="#ffffff" stroke-width="112" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="2"/>
+  <path fill="url(#edge)" d="M162 246h180l170 230 170-230h180v548h-180V500L512 700 342 500v294H162V246z"/>
+  <path fill="url(#face)" d="M148 228h180l184 236 184-236h180v548H692V478L512 690 332 478v298H148V228z"/>
 </svg>

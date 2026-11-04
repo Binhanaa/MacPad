@@ -1518,6 +1518,21 @@ static int nppDetectEOLMode(const char *bytes, NSUInteger len) {
 
 #pragma mark - Theme
 
+// A dark theme whose text page is lighter than the line-number gutter draws a
+// gray panel. Use the gutter colour so the page is one dark surface.
+static NSColor *nppEditorPageColor;
+
+static NSColor *nppUnifiedPageBackground(NSColor *themeBg, NSColor *gutterBg) {
+    if (!themeBg || !gutterBg) return themeBg;
+    NSColor *body = [themeBg colorUsingColorSpace:[NSColorSpace sRGBColorSpace]];
+    NSColor *gutter = [gutterBg colorUsingColorSpace:[NSColorSpace sRGBColorSpace]];
+    if (!body || !gutter) return themeBg;
+    if (body.brightnessComponent < 0.55 &&
+        gutter.brightnessComponent + 0.06 < body.brightnessComponent)
+        return gutterBg;
+    return themeBg;
+}
+
 // Convert NSColor to Scintilla's BGR integer format (r | g<<8 | b<<16)
 static sptr_t sciColor(NSColor *c) {
     c = [c colorUsingColorSpace:[NSColorSpace sRGBColorSpace]];
@@ -1609,6 +1624,16 @@ static NSString *nppEditorFontName(NSString *name) {
     NSColor *lnBg = gsLineNum.bgColor ?: (bgBrightness > 0.5 ? [NSColor colorWithWhite:0.95 alpha:1.0] : bg);
     [sci setColorProperty:SCI_STYLESETFORE parameter:STYLE_LINENUMBER value:lnFg];
     [sci setColorProperty:SCI_STYLESETBACK parameter:STYLE_LINENUMBER value:lnBg];
+    NSColor *page = nppUnifiedPageBackground(bg, lnBg);
+    if (page != bg) {
+        bg = page;
+        [sci setColorProperty:SCI_STYLESETBACK parameter:STYLE_DEFAULT value:bg];
+        [sci message:SCI_STYLECLEARALL];
+        [sci setColorProperty:SCI_STYLESETFORE parameter:STYLE_LINENUMBER value:lnFg];
+        [sci setColorProperty:SCI_STYLESETBACK parameter:STYLE_LINENUMBER value:lnBg];
+        sci.scrollView.backgroundColor = bg;
+    }
+    nppEditorPageColor = bg;
 
     // Caret
     NPPStyleEntry *gsCaret = [store globalStyleNamed:@"Caret colour"];
@@ -1620,6 +1645,14 @@ static NSString *nppEditorFontName(NSString *name) {
         ?: (bgBrightness > 0.5
             ? [NSColor colorWithRed:0.97 green:0.97 blue:1.0 alpha:1.0]
             : [NSColor colorWithWhite:bgBrightness + 0.08 alpha:1.0]);
+    {
+        NSColor *pageS = [bg colorUsingColorSpace:[NSColorSpace sRGBColorSpace]];
+        NSColor *lineS = [caretLineBg colorUsingColorSpace:[NSColorSpace sRGBColorSpace]];
+        if (pageS && lineS && pageS.brightnessComponent < 0.2 &&
+            fabs(lineS.brightnessComponent - pageS.brightnessComponent) < 0.06) {
+            caretLineBg = [NSColor colorWithSRGBRed:0x24/255.0 green:0x24/255.0 blue:0x24/255.0 alpha:1];
+        }
+    }
     [sci message:SCI_SETCARETLINEBACK wParam:sciColor(caretLineBg)];
 
     // Selected text
@@ -1806,6 +1839,16 @@ static NSString *nppEditorFontName(NSString *name) {
     NSColor *lnBg = gsLineNum.bgColor ?: (bgBrightness > 0.5 ? [NSColor colorWithWhite:0.95 alpha:1.0] : bg);
     [sci setColorProperty:SCI_STYLESETFORE parameter:STYLE_LINENUMBER value:lnFg];
     [sci setColorProperty:SCI_STYLESETBACK parameter:STYLE_LINENUMBER value:lnBg];
+    NSColor *page = nppUnifiedPageBackground(bg, lnBg);
+    if (page != bg) {
+        bg = page;
+        [sci setColorProperty:SCI_STYLESETBACK parameter:STYLE_DEFAULT value:bg];
+        [sci message:SCI_STYLECLEARALL];
+        [sci setColorProperty:SCI_STYLESETFORE parameter:STYLE_LINENUMBER value:lnFg];
+        [sci setColorProperty:SCI_STYLESETBACK parameter:STYLE_LINENUMBER value:lnBg];
+        sci.scrollView.backgroundColor = bg;
+    }
+    nppEditorPageColor = bg;
 
     // Caret color
     NPPStyleEntry *gsCaret = [store globalStyleNamed:@"Caret colour"];
@@ -1817,6 +1860,14 @@ static NSString *nppEditorFontName(NSString *name) {
         ?: (bgBrightness > 0.5
             ? [NSColor colorWithRed:0.97 green:0.97 blue:1.0 alpha:1.0]
             : [NSColor colorWithWhite:bgBrightness + 0.08 alpha:1.0]);
+    {
+        NSColor *pageS = [bg colorUsingColorSpace:[NSColorSpace sRGBColorSpace]];
+        NSColor *lineS = [caretLineBg colorUsingColorSpace:[NSColorSpace sRGBColorSpace]];
+        if (pageS && lineS && pageS.brightnessComponent < 0.2 &&
+            fabs(lineS.brightnessComponent - pageS.brightnessComponent) < 0.06) {
+            caretLineBg = [NSColor colorWithSRGBRed:0x24/255.0 green:0x24/255.0 blue:0x24/255.0 alpha:1];
+        }
+    }
     [sci message:SCI_SETCARETLINEBACK wParam:sciColor(caretLineBg)];
 
     // Selected text colour
@@ -2936,7 +2987,17 @@ static const int kGitGutterMargin   = 4;  // margin index for git gutter
             if (gov.bgColor)
                 [sci setColorProperty:SCI_STYLESETBACK parameter:sid value:gov.bgColor];
         } else if (e.bgColor) {
-            [sci setColorProperty:SCI_STYLESETBACK parameter:sid value:e.bgColor];
+            NSColor *useBg = e.bgColor;
+            NSColor *styleS = [useBg colorUsingColorSpace:[NSColorSpace sRGBColorSpace]];
+            NSColor *pageS = [nppEditorPageColor colorUsingColorSpace:[NSColorSpace sRGBColorSpace]];
+            if (styleS && pageS &&
+                fabs(styleS.redComponent - styleS.greenComponent) < 0.04 &&
+                fabs(styleS.greenComponent - styleS.blueComponent) < 0.04 &&
+                pageS.brightnessComponent < 0.25 &&
+                styleS.brightnessComponent > pageS.brightnessComponent + 0.05) {
+                useBg = nppEditorPageColor;
+            }
+            [sci setColorProperty:SCI_STYLESETBACK parameter:sid value:useBg];
         }
 
         // font name

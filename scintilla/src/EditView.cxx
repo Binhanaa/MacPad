@@ -647,7 +647,7 @@ Point EditView::LocationFromPosition(Surface *surface, const EditModel &model, S
 		pt.x += vs.textStart - model.xOffset;
 
 		// RTL: apply same right-alignment offset as DrawLine
-		if (model.BidirectionalR2L()) {
+		if (model.BidirectionalR2L() && !model.BidirectionalEnabled()) {
 			const int subLine = ll->SubLineFromPosition(posInLine, pe);
 			const Range lineRange = ll->SubLineRange(subLine, LineLayout::Scope::visibleOnly);
 			const XYPOSITION subLineStart = ll->positions[lineRange.start];
@@ -730,8 +730,10 @@ SelectionPosition EditView::SPositionFromLocation(Surface *surface, const EditMo
 			const XYPOSITION subLineStart = ll->positions[rangeSubLine.start];
 			if (subLine > 0)	// Wrapped
 				pt.x -= ll->wrapIndent;
-			// RTL: subtract the right-alignment offset from click position
-			if (model.BidirectionalR2L()) {
+			// The manual shift is only for documents that cannot run the bidi
+			// layout. When bidi is on, PositionFromX is already in visual
+			// order; subtracting the shift maps the end of the line to the start.
+			if (model.BidirectionalR2L() && !model.BidirectionalEnabled()) {
 				const XYPOSITION lineWidth = ll->positions[rangeSubLine.end] - subLineStart;
 				const XYPOSITION textAreaWidth = rcClient.right - vs.textStart;
 				pt.x -= (textAreaWidth - lineWidth);
@@ -1564,7 +1566,7 @@ void EditView::DrawCarets(Surface *surface, const EditModel &model, const ViewSt
 
 				xposCaret += xOrigin;
 				// RTL: apply same right-alignment offset as DrawLine
-				if (model.BidirectionalR2L()) {
+				if (model.BidirectionalR2L() && !model.BidirectionalEnabled()) {
 					const Range lineRange = ll->SubLineRange(subLine, LineLayout::Scope::visibleOnly);
 					const XYPOSITION subLineStart = ll->positions[lineRange.start];
 					const XYPOSITION lineWidth = ll->positions[lineRange.end] - subLineStart;
@@ -2419,8 +2421,15 @@ void EditView::DrawLine(Surface *surface, const EditModel &model, const ViewStyl
 	}
 	int xStart = xOrigin + ((subLine > 0) ? static_cast<int>(ll->wrapIndent) : 0);
 
+	// RTL: paint the whole line with the editor colour before the text runs.
+	// Otherwise only the characters and the spaces between them pick up a
+	// background, and that strip reads as a gray highlight.
+	if (model.BidirectionalR2L() && FlagSet(phase, DrawPhase::back)) {
+		surface->FillRectangleAligned(rcLine, Fill(vsDraw.styles[StyleDefault].back));
+	}
+
 	// RTL: right-align text — short lines offset right, long lines overflow left
-	if (model.BidirectionalR2L()) {
+	if (model.BidirectionalR2L() && !model.BidirectionalEnabled()) {
 		const XYPOSITION lineWidth = ll->positions[lineRange.end] - subLineStart;
 		const XYPOSITION textAreaWidth = rcLine.right - rcLine.left;
 		xStart += static_cast<int>(textAreaWidth - lineWidth);
@@ -2520,13 +2529,14 @@ void EditView::PaintText(Surface *surfaceWindow, const EditModel &model, const V
 		const Sci::Line lineCaret = model.pdoc->SciLineFromPosition(posCaret.Position());
 		const int caretOffset = static_cast<int>(posCaret.Position() - model.pdoc->LineStart(lineCaret));
 
+		// Cocoa keeps the line-number gutter in a separate view (marginInside
+		// is false) and used to paint text across the whole content view, so
+		// the left padding never appeared while the right one did. Inset both
+		// edges from the full client rect — not the partial dirty rect — so
+		// right-aligned lines stay aligned during partial repaints.
 		PRectangle rcTextArea = rcClient;
-		if (vsDraw.marginInside) {
-			rcTextArea.left += vsDraw.textStart;
-			rcTextArea.right -= vsDraw.rightMarginWidth;
-		} else {
-			rcTextArea = rcArea;
-		}
+		rcTextArea.left += vsDraw.textStart;
+		rcTextArea.right -= vsDraw.rightMarginWidth;
 
 		// Remove selection margin from drawing area so text will not be drawn
 		// on it in unbuffered mode.
@@ -2656,7 +2666,7 @@ void EditView::PaintText(Surface *surfaceWindow, const EditModel &model, const V
 		// Right column limit indicator
 		PRectangle rcBeyondEOF = (vsDraw.marginInside) ? rcClient : rcArea;
 		rcBeyondEOF.left = static_cast<XYPOSITION>(vsDraw.textStart);
-		rcBeyondEOF.right = rcBeyondEOF.right - ((vsDraw.marginInside) ? vsDraw.rightMarginWidth : 0);
+		rcBeyondEOF.right -= vsDraw.rightMarginWidth;
 		rcBeyondEOF.top = static_cast<XYPOSITION>((model.pcs->LinesDisplayed() - model.TopLineOfMain()) * vsDraw.lineHeight);
 		if (rcBeyondEOF.top < rcBeyondEOF.bottom) {
 			surfaceWindow->FillRectangleAligned(rcBeyondEOF, Fill(vsDraw.styles[StyleDefault].back));

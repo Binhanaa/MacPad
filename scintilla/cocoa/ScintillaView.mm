@@ -77,8 +77,7 @@ static NSCursor *cursorFromEnum(Window::Cursor cursor) {
 		const CGFloat rulerWidth = self.verticalRulerView.requiredThickness;
 		NSRect contentFrame = self.contentView.frame;
 		if (_rtlMode) {
-			// RTL: ruler (line numbers/bookmarks) on the right side.
-			// Word wrap is forced on in RTL so no horizontal scrollbar.
+			// RTL: line numbers on the right, vertical scroller on the left.
 			contentFrame.origin.x = 0;
 			contentFrame.size.width = NSWidth(self.frame) - rulerWidth;
 			self.contentView.frame = contentFrame;
@@ -87,10 +86,16 @@ static NSCursor *cursorFromEnum(Window::Cursor cursor) {
 			rulerFrame.size.width = rulerWidth;
 			self.verticalRulerView.frame = rulerFrame;
 		} else {
-			// LTR: ruler on the left (default)
+			// LTR: line numbers on the left, scroller on the right.
 			contentFrame.origin.x = rulerWidth;
 			contentFrame.size.width -= contentFrame.origin.x;
 			self.contentView.frame = contentFrame;
+		}
+		NSScroller *bar = self.verticalScroller;
+		if (bar && self.hasVerticalScroller) {
+			NSRect barFrame = bar.frame;
+			barFrame.origin.x = _rtlMode ? 2.0 : (NSWidth(self.bounds) - NSWidth(barFrame) - 2.0);
+			bar.frame = barFrame;
 		}
 	}
 #endif

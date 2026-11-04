@@ -219,8 +219,11 @@ add_custom_command(TARGET NotepadPlusPlusMac POST_BUILD
 add_custom_command(TARGET NotepadPlusPlusMac POST_BUILD
     # Force-copy so an updated icns is always written (copy_if_different can miss timestamp ties)
     COMMAND ${CMAKE_COMMAND} -E copy
-        "${CMAKE_SOURCE_DIR}/resources/npp.icns"
-        "$<TARGET_BUNDLE_DIR:NotepadPlusPlusMac>/Contents/Resources/npp.icns"
+        "${CMAKE_SOURCE_DIR}/resources/AppIcon.icns"
+        "$<TARGET_BUNDLE_DIR:NotepadPlusPlusMac>/Contents/Resources/AppIcon.icns"
+    COMMAND ${CMAKE_COMMAND} -E copy
+        "${CMAKE_SOURCE_DIR}/resources/Assets.car"
+        "$<TARGET_BUNDLE_DIR:NotepadPlusPlusMac>/Contents/Resources/Assets.car"
     # Touch the bundle so macOS knows the icon changed, then re-register with LaunchServices
     COMMAND touch "$<TARGET_BUNDLE_DIR:NotepadPlusPlusMac>"
     COMMAND /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister
@@ -481,9 +484,9 @@ add_custom_command(TARGET NotepadPlusPlusMac POST_BUILD
     COMMENT "Ad-hoc code signing the app bundle")
 
 set_target_properties(NotepadPlusPlusMac PROPERTIES
-    OUTPUT_NAME "Nextpad++"
+    OUTPUT_NAME "Nextpad"
     MACOSX_BUNDLE_INFO_PLIST "${CMAKE_SOURCE_DIR}/resources/Info.plist"
-    MACOSX_BUNDLE_BUNDLE_NAME "Nextpad++"
+    MACOSX_BUNDLE_BUNDLE_NAME "Nextpad"
     MACOSX_BUNDLE_GUI_IDENTIFIER "org.nextpadplusplus.mac"
     MACOSX_BUNDLE_BUNDLE_VERSION "1.0.8"
     MACOSX_BUNDLE_SHORT_VERSION_STRING "1.0.8"

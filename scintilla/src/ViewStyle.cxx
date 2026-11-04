@@ -564,8 +564,12 @@ ColourOptional ViewStyle::Background(int marksOfLine, bool caretActive, bool lin
 		int marksMasked = marksOfLine & maskInLine;
 		if (marksMasked) {
 			for (int markBit = 0; (markBit <= MarkerMax) && marksMasked; markBit++) {
+				// Empty markers (change-history placeholders) have no margin of
+				// their own. Painting their back colour here turns every space
+				// on the line gray, which shows up as a bar under right-aligned text.
 				if ((marksMasked & 1) &&
-					(markers[markBit].layer == Layer::Base)) {
+					(markers[markBit].layer == Layer::Base) &&
+					(markers[markBit].markType != MarkerSymbol::Empty)) {
 					background = markers[markBit].back;
 				}
 				marksMasked >>= 1;

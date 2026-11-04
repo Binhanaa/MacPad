@@ -309,6 +309,8 @@ static int nppDetectEOLMode(const char *bytes, NSUInteger len) {
     BOOL    _largeFileMode;
     BOOL    _wordWrapEnabled;
     BOOL    _savedWrapBeforeRTL;  // word wrap state before RTL was enabled
+    BOOL    _writingDirectionPinned;  // user chose direction from the menu; don't override while typing
+    BOOL    _refreshingDirection;
     BOOL    _scintillaOverridesApplied;  // YES once Scintilla-command overrides were pushed to this editor's keymap
     BOOL    _isRecordingMacro;
     NSMutableArray<NSDictionary *> *_macroActions;
@@ -649,6 +651,9 @@ static int nppDetectEOLMode(const char *bytes, NSUInteger len) {
     }
 
     // Load into Scintilla using SCI_ADDTEXT with explicit length — binary safe.
+    // A newly loaded document follows its own leading script, not a direction
+    // the user pinned on the previous buffer in this tab.
+    _writingDirectionPinned = NO;
     [_scintillaView message:SCI_CLEARALL wParam:0 lParam:0];
     [_scintillaView message:SCI_ADDTEXT
                      wParam:(uptr_t)utf8Data.length
@@ -735,6 +740,7 @@ static int nppDetectEOLMode(const char *bytes, NSUInteger len) {
         [_scintillaView message:SCI_SETMARGINRIGHT wParam:0 lParam:curRight];
     });
 
+    [self refreshWritingDirectionFromContent];
     return YES;
 }
 
@@ -1409,6 +1415,7 @@ static int nppDetectEOLMode(const char *bytes, NSUInteger len) {
     }
 
     // Load into Scintilla
+    _writingDirectionPinned = NO;
     [_scintillaView message:SCI_SETREADONLY wParam:0 lParam:0];
     [_scintillaView message:SCI_CLEARALL wParam:0 lParam:0];
     [_scintillaView message:SCI_ADDTEXT wParam:(uptr_t)utf8Data.length lParam:(sptr_t)utf8Data.bytes];
@@ -1422,7 +1429,9 @@ static int nppDetectEOLMode(const char *bytes, NSUInteger len) {
     _fileEncoding = enc;
     _hasBOM = bom;
     _isModified = NO;
+    _writingDirectionPinned = NO;
     [self discardBackup];   // the reload discarded the unsaved text it held
+    [self refreshWritingDirectionFromContent];
     return YES;
 }
 
@@ -1853,7 +1862,8 @@ static NSString *nppEditorFontName(NSString *name) {
     // scroll width only grows where the caret has been, so a freshly
     // loaded file's long lines (caret never visited) stay partly
     // unreachable.
-    [sci message:SCI_SETSCROLLWIDTHTRACKING wParam:1];
+    [sci message:SCI_SETSCROLLWIDTHTRACKING wParam:0];
+    [sci message:SCI_SETHSCROLLBAR wParam:0];
 
     // ── Change-history bar (margin 2, 2 px) ──────────────────────────────────
     // When SC_CHANGE_HISTORY_MARKERS is enabled Scintilla auto-assigns default
@@ -2571,12 +2581,16 @@ int NppScintillaDefaultKeyCombos(int sciID, int *combos, int maxCombos) {
     // NPPWordWrapSessionChanged broadcast (universal-in-window-and-cross-window).
     // The Preferences > Editor checkbox writes here too and the standard
     // NPPPreferencesChanged path re-runs this method on every editor.
-    BOOL wordWrap = [ud boolForKey:kPrefWordWrap];
-    _wordWrapEnabled = wordWrap;
-    [sci message:SCI_SETWRAPMODE wParam:wordWrap ? SC_WRAP_WORD : SC_WRAP_NONE];
+    // Wide lines stay on the page. A horizontal scroller is never shown,
+    // including under right-to-left text.
+    _wordWrapEnabled = YES;
+    [sci message:SCI_SETWRAPMODE wParam:SC_WRAP_WORD];
+    [sci message:SCI_SETHSCROLLBAR wParam:0];
+    [sci message:SCI_SETSCROLLWIDTHTRACKING wParam:0];
+    sci.scrollView.hasHorizontalScroller = NO;
 
-    NSInteger zoomLevel = [ud integerForKey:kPrefZoomLevel];
-    [sci message:SCI_SETZOOM wParam:(uptr_t)zoomLevel];
+    // Zoom belongs to this buffer. Reapplying preferences must not copy
+    // another tab's size onto this one.
 
     // ── Caret width (1-3 pixels) ──
     {
@@ -2628,8 +2642,20 @@ int NppScintillaDefaultKeyCombos(int sciID, int *combos, int maxCombos) {
     }
 
     // ── Padding ──
-    [sci message:SCI_SETMARGINLEFT  wParam:0 lParam:[ud integerForKey:kPrefPaddingLeft]];
-    [sci message:SCI_SETMARGINRIGHT wParam:0 lParam:[ud integerForKey:kPrefPaddingRight]];
+    // Negative values pull the text out of the view (the left edge then looks
+    // like it has no inset). Treat them as the same number of pixels of inset.
+    NSInteger padL = [ud integerForKey:kPrefPaddingLeft];
+    NSInteger padR = [ud integerForKey:kPrefPaddingRight];
+    if (padL < 0) padL = -padL;
+    if (padR < 0) padR = -padR;
+    if (padL > 200) padL = 200;
+    if (padR > 200) padR = 200;
+    if (padL != [ud integerForKey:kPrefPaddingLeft])
+        [ud setInteger:padL forKey:kPrefPaddingLeft];
+    if (padR != [ud integerForKey:kPrefPaddingRight])
+        [ud setInteger:padR forKey:kPrefPaddingRight];
+    [sci message:SCI_SETMARGINLEFT  wParam:0 lParam:padL];
+    [sci message:SCI_SETMARGINRIGHT wParam:0 lParam:padR];
 
     // ── Line number dynamic width ──
     // Falls back to the fixed 44 px just set above when dyn-width is OFF.
@@ -2637,35 +2663,12 @@ int NppScintillaDefaultKeyCombos(int sciID, int *combos, int maxCombos) {
 
     // ── Fold margin style ──
     {
-        NSInteger foldStyle = [ud integerForKey:kPrefFoldStyle];
-        if (foldStyle == 4) {
-            // None — hide fold margin
-            [sci message:SCI_SETMARGINWIDTHN wParam:3 lParam:0];
-        } else {
+        // One fold marker: simple +/- . It stays readable in both directions.
+        {
             [sci message:SCI_SETMARGINWIDTHN wParam:3 lParam:12];
-            int plus, minus, plusC, minusC, mid, tail, sub;
-            switch (foldStyle) {
-                case 1: // Circle
-                    plus=SC_MARK_CIRCLEPLUS; minus=SC_MARK_CIRCLEMINUS;
-                    plusC=SC_MARK_CIRCLEPLUSCONNECTED; minusC=SC_MARK_CIRCLEMINUSCONNECTED;
-                    mid=SC_MARK_TCORNERCURVE; tail=SC_MARK_LCORNERCURVE; sub=SC_MARK_VLINE;
-                    break;
-                case 2: // Arrow
-                    plus=SC_MARK_ARROWDOWN; minus=SC_MARK_ARROW;
-                    plusC=SC_MARK_ARROWDOWN; minusC=SC_MARK_ARROW;
-                    mid=SC_MARK_EMPTY; tail=SC_MARK_EMPTY; sub=SC_MARK_EMPTY;
-                    break;
-                case 3: // Simple +/-
-                    plus=SC_MARK_PLUS; minus=SC_MARK_MINUS;
-                    plusC=SC_MARK_PLUS; minusC=SC_MARK_MINUS;
-                    mid=SC_MARK_EMPTY; tail=SC_MARK_EMPTY; sub=SC_MARK_EMPTY;
-                    break;
-                default: // 0 = Box (default)
-                    plus=SC_MARK_BOXPLUS; minus=SC_MARK_BOXMINUS;
-                    plusC=SC_MARK_BOXPLUSCONNECTED; minusC=SC_MARK_BOXMINUSCONNECTED;
-                    mid=SC_MARK_TCORNERCURVE; tail=SC_MARK_LCORNERCURVE; sub=SC_MARK_VLINE;
-                    break;
-            }
+            int plus=SC_MARK_PLUS, minus=SC_MARK_MINUS;
+            int plusC=SC_MARK_PLUS, minusC=SC_MARK_MINUS;
+            int mid=SC_MARK_EMPTY, tail=SC_MARK_EMPTY, sub=SC_MARK_EMPTY;
             [sci message:SCI_MARKERDEFINE wParam:SC_MARKNUM_FOLDER        lParam:plus];
             [sci message:SCI_MARKERDEFINE wParam:SC_MARKNUM_FOLDEROPEN    lParam:minus];
             [sci message:SCI_MARKERDEFINE wParam:SC_MARKNUM_FOLDEREND     lParam:plusC];
@@ -4769,6 +4772,8 @@ static NSSet<NSString *> *_cLikeLanguages() {
         case SCN_MODIFIED:
             if (notification->modificationType & (SC_MOD_INSERTTEXT | SC_MOD_DELETETEXT)) {
                 _isModified = YES;
+                if (!_writingDirectionPinned)
+                    [self refreshWritingDirectionFromContent];
                 // Sync clone sibling's modified state (shared document).
                 if (_cloneSibling) _cloneSibling->_isModified = YES;
                 // When whitespace display is active, newly inserted characters may not
@@ -5261,7 +5266,65 @@ static NSSet<NSString *> *_cLikeLanguages() {
 static const unsigned int kSCI_SetBidirectional = 2709; // Scintilla::Message::SetBidirectional
 static const unsigned int kSCI_GetBidirectional = 2708;
 
+/// 1 = first strong letter is Arabic/Hebrew (RTL), -1 = another letter (LTR), 0 = none yet.
+static int nppLeadingWritingDirection(NSString *text) {
+    if (text.length == 0) return 0;
+    NSUInteger limit = MIN(text.length, (NSUInteger)400);
+    for (NSUInteger i = 0; i < limit; i++) {
+        unichar c = [text characterAtIndex:i];
+        if (CFStringIsSurrogateHighCharacter(c)) { i++; continue; }
+        if (c <= 0x20 || c == 0xFEFF || c == 0x00A0 || c == 0x200B ||
+            c == 0x200E || c == 0x200F || c == 0x202A || c == 0x202C)
+            continue;
+        // Arabic-Indic digits are weak: "١٢٣ hello" should still follow the letter.
+        if ((c >= 0x0660 && c <= 0x0669) || (c >= 0x06F0 && c <= 0x06F9))
+            continue;
+        BOOL rtlLetter =
+            (c >= 0x0590 && c <= 0x08FF) ||   // Hebrew, Arabic, Syriac, Thaana
+            (c >= 0xFB1D && c <= 0xFDFF) ||   // Hebrew/Arabic presentation forms
+            (c >= 0xFE70 && c <= 0xFEFC);     // Arabic presentation forms B
+        if (rtlLetter) return 1;
+        if ([[NSCharacterSet letterCharacterSet] characterIsMember:c]) return -1;
+    }
+    return 0;
+}
+
+- (int)leadingWritingDirection {
+    ScintillaView *sci = _scintillaView;
+    sptr_t len = [sci message:SCI_GETTEXTLENGTH];
+    if (len <= 0) return 0;
+    sptr_t n = len < 2048 ? len : 2048;
+    // Scintilla positions are UTF-8 bytes. Don't split the last code point.
+    std::vector<char> buf((size_t)n + 1, 0);
+    Sci_TextRangeFull tr;
+    tr.chrg.cpMin = 0;
+    tr.chrg.cpMax = (Sci_Position)n;
+    tr.lpstrText = buf.data();
+    [sci message:SCI_GETTEXTRANGEFULL wParam:0 lParam:(sptr_t)&tr];
+    // A 2048-byte cut can split the last code point. Shrink until it decodes.
+    NSString *s = nil;
+    NSUInteger nbytes = (NSUInteger)n;
+    while (nbytes > 0 && !s) {
+        s = [[NSString alloc] initWithBytes:buf.data() length:nbytes encoding:NSUTF8StringEncoding];
+        if (!s) nbytes--;
+    }
+    return nppLeadingWritingDirection(s);
+}
+
+- (void)refreshWritingDirectionFromContent {
+    if (_writingDirectionPinned || _refreshingDirection) return;
+    int dir = [self leadingWritingDirection];
+    if (dir == 0) return;
+    BOOL wantRTL = dir > 0;
+    if (wantRTL == self.isTextDirectionRTL) return;
+    _refreshingDirection = YES;
+    if (wantRTL) [self setTextDirectionRTL:nil];
+    else         [self setTextDirectionLTR:nil];
+    _refreshingDirection = NO;
+}
+
 - (void)setTextDirectionRTL:(id)sender {
+    if (sender) _writingDirectionPinned = YES;
     [_scintillaView message:kSCI_SetBidirectional wParam:2]; // Bidirectional::R2L
     [self _applyRTLKeyBindings:YES];
     [self _applyRTLLayout:YES];
@@ -5274,6 +5337,7 @@ static const unsigned int kSCI_GetBidirectional = 2708;
 }
 
 - (void)setTextDirectionLTR:(id)sender {
+    if (sender) _writingDirectionPinned = YES;
     [_scintillaView message:kSCI_SetBidirectional wParam:0]; // Bidirectional::Disabled
     [self _applyRTLKeyBindings:NO];
     [self _applyRTLLayout:NO];
@@ -5326,8 +5390,18 @@ static const unsigned int kSCI_GetBidirectional = 2708;
 #pragma mark - Scroller style helpers
 
 - (void)_applyLegacyScrollerStyle {
-    _scintillaView.scrollView.scrollerStyle = NSScrollerStyleLegacy;
-    _scintillaView.scrollView.autohidesScrollers = YES;
+    NSScrollView *scroll = _scintillaView.scrollView;
+    // Overlay: a thin knob, hidden until the document is taller than the window.
+    scroll.scrollerStyle = NSScrollerStyleOverlay;
+    scroll.autohidesScrollers = YES;
+    scroll.hasVerticalScroller = YES;
+    scroll.hasHorizontalScroller = NO;
+    scroll.verticalScroller.controlSize = NSControlSizeSmall;
+    [_scintillaView message:SCI_SETHSCROLLBAR wParam:0];
+    [_scintillaView message:SCI_SETSCROLLWIDTHTRACKING wParam:0];
+    [_scintillaView message:SCI_SETWRAPMODE wParam:SC_WRAP_WORD];
+    _wordWrapEnabled = YES;
+    [(SCIScrollView *)scroll tile];
 }
 
 - (void)viewDidMoveToWindow {

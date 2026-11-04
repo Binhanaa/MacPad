@@ -31,7 +31,7 @@
       <Button hide="no"  id="TB_SaveAll"       action="saveAllDocuments:"         name="Save All"               trigger="click" />
       <Button hide="no"  id="TB_Close"         action="closeCurrentTab:"          name="Close"                  trigger="click" />
       <Button hide="no"  id="TB_CloseAll"      action="closeAllTabs:"             name="Close All"              trigger="click" />
-      <Button hide="no"  id="TB_Print"         action="printDocument:"            name="Print..."               trigger="click" />
+      <Button hide="yes" id="TB_Print"         action="printDocument:"            name="Print..."               trigger="click" />
       <Button hide="yes" id="TB_SaveAs"        action="saveDocumentAs:"           name="Save As..."             trigger="click" />
       <Button hide="yes" id="TB_SaveCopy"      action="saveDocumentCopyAs:"       name="Save a Copy As..."      trigger="click" />
       <Button hide="yes" id="TB_Rename"        action="renameDocument:"           name="Rename..."              trigger="click" />
@@ -47,7 +47,7 @@
       <Button hide="yes" id="TB_OpenViewer"    action="openInDefaultViewer:"      name="Open in Default Viewer" trigger="click" />
 
       <!-- ══════════ Edit ══════════ -->
-      <Button hide="no"  id="TB_Cut"           action="cut:"                      name="Cut"                    trigger="click" />
+      <Button hide="yes" id="TB_Cut"           action="cut:"                      name="Cut"                    trigger="click" />
       <Button hide="no"  id="TB_Copy"          action="copy:"                     name="Copy"                   trigger="click" />
       <Button hide="no"  id="TB_Paste"         action="paste:"                    name="Paste"                  trigger="click" />
       <Button hide="no"  id="TB_Undo"          action="undo:"                     name="Undo"                   trigger="click" />
@@ -75,7 +75,8 @@
 
       <!-- ══════════ Search ══════════ -->
       <Button hide="no"  id="TB_Find"          action="showFindPanel:"           name="Find..."                trigger="click" />
-      <Button hide="no"  id="TB_FindRep"       action="showReplacePanel:"        name="Replace..."             trigger="click" />
+      <!-- Replace opens the same Find window (its Replace tab). Keep it in the Search menu only. -->
+      <Button hide="yes" id="TB_FindRep"       action="showReplacePanel:"        name="Replace..."             trigger="click" />
       <Button hide="yes" id="TB_FindInFiles"   action="showFindInFiles:"         name="Find in Files..."       trigger="click" />
       <Button hide="yes" id="TB_FindNext"      action="findNext:"               name="Find Next"              trigger="click" />
       <Button hide="yes" id="TB_FindPrev"      action="findPrevious:"           name="Find Previous"          trigger="click" />
@@ -89,8 +90,8 @@
       <Button hide="yes" id="TB_ClearBookmark" action="clearAllBookmarks:"      name="Clear All Bookmarks"    trigger="click" />
 
       <!-- ══════════ View ══════════ -->
-      <Button hide="no"  id="TB_ZoomIn"        action="zoomIn:"                  name="Zoom In"                trigger="click" />
-      <Button hide="no"  id="TB_ZoomOut"       action="zoomOut:"                 name="Zoom Out"               trigger="click" />
+      <Button hide="yes" id="TB_ZoomIn"        action="zoomIn:"                  name="Zoom In"                trigger="click" />
+      <Button hide="yes" id="TB_ZoomOut"       action="zoomOut:"                 name="Zoom Out"               trigger="click" />
       <Button hide="no"  id="TB_SyncV"         action="toggleSyncVerticalScrolling:"   name="Sync Vertical Scrolling"   trigger="toggle" />
       <Button hide="no"  id="TB_SyncH"         action="toggleSyncHorizontalScrolling:" name="Sync Horizontal Scrolling" trigger="toggle" />
       <Button hide="no"  id="TB_Wrap"          action="toggleWordWrap:"          name="Word Wrap"              trigger="toggle" />

@@ -60,7 +60,7 @@ static NSDate *NppMarkLaunch(void) {
         NSDictionary *marker = [NSDictionary dictionaryWithContentsOfFile:path];
         id pid = marker[@"pid"];
         if ([pid isKindOfClass:[NSNumber class]] && NppIsOtherLiveInstance([pid intValue])) {
-            NSLog(@"[Nextpad++] another instance (pid %@) is running; skipping crash recovery", pid);
+            NSLog(@"[Nextpad] another instance (pid %@) is running; skipping crash recovery", pid);
             return nil;                                   // not ours: leave it alone
         }
         id since    = marker[@"recoverSince"];
@@ -102,7 +102,7 @@ static void NppRecoveryDone(void) {
     // Disable the macOS press-and-hold accent picker so key repeat works in the editor.
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"ApplePressAndHoldEnabled"];
 
-    // Issue #126 — wire the "Open with Nextpad++" Finder service. The NSServices
+    // Issue #126 — wire the "Open with Nextpad" Finder service. The NSServices
     // entry in Info.plist declares the menu item; this registers the object that
     // receives the file URLs. NSUpdateDynamicServices() nudges the system to pick
     // it up promptly (notably right after a fresh install).
@@ -215,7 +215,7 @@ static void NppRecoveryDone(void) {
 
     // Title bar addition (-titleAdd)
     if (cli.titleAdd.length) {
-        NSString *base = self.mainWindowController.window.title ?: @"Nextpad++";
+        NSString *base = self.mainWindowController.window.title ?: @"Nextpad";
         self.mainWindowController.window.title = [NSString stringWithFormat:@"%@ - %@", base, cli.titleAdd];
     }
 
@@ -306,7 +306,7 @@ static void NppRecoveryDone(void) {
         NSTimeInterval elapsed = -[self.launchStart timeIntervalSinceNow];
         NSString *msg = [NSString stringWithFormat:@"Loading time: %.2f seconds", elapsed];
         NSAlert *a = [[NSAlert alloc] init];
-        a.messageText = [[NppLocalizer shared] translate:@"Nextpad++ Loading Time"];
+        a.messageText = [[NppLocalizer shared] translate:@"Nextpad Loading Time"];
         a.informativeText = msg;
         a.icon = [[NSImage alloc] initWithContentsOfFile:
             NppConfigSubpath(@"plugins/Config/logo100px.png")];
@@ -615,7 +615,7 @@ static void NppRecoveryDone(void) {
     [sender replyToOpenOrPrint:NSApplicationDelegateReplySuccess];
 }
 
-/// Issue #126 — "Open with Nextpad++" Finder service handler. Declared via
+/// Issue #126 — "Open with Nextpad" Finder service handler. Declared via
 /// NSServices in Info.plist (NSMessage=openFilesService). Finder places the
 /// selected items on the pasteboard as file URLs; we route them through the
 /// same open path as Apple-event opens (folder expansion + window surfacing),
@@ -650,7 +650,7 @@ static void NppRecoveryDone(void) {
     for (NSString *path in files) {
         [mwc openFileAtPath:path];
     }
-    [mwc bringWindowForward];  // activates Nextpad++ over Finder
+    [mwc bringWindowForward];  // activates Nextpad over Finder
 }
 
 /// Returns the window controller for the key window, or mainWindowController as fallback.
@@ -898,7 +898,7 @@ static void NppRecoveryDone(void) {
 #endif
 
     NSAlert *about = [[NSAlert alloc] init];
-    about.messageText = [NSString stringWithFormat:@"Nextpad++ macOS v%@     (%@)", version, archStr];
+    about.messageText = [NSString stringWithFormat:@"Nextpad macOS v%@     (%@)", version, archStr];
 
     NSString *license =
         @"GNU General Public Licence\n\n"
@@ -1032,7 +1032,7 @@ static NSString *const kUpdateMenuItemTag = @"checkForUpdatesMenuItem";
                     NSAlert *a = [[NSAlert alloc] init];
                     a.messageText = [loc translate:@"You're Up to Date"];
                     a.informativeText = [NSString stringWithFormat:
-                        @"Nextpad++ %@ %@", currentVersion, [loc translate:@"is the latest version."]];
+                        @"Nextpad %@ %@", currentVersion, [loc translate:@"is the latest version."]];
                     [a runModal];
                 }
             }
@@ -1049,7 +1049,7 @@ static NSString *const kUpdateMenuItemTag = @"checkForUpdatesMenuItem";
 
     NppLocalizer *loc = [NppLocalizer shared];
     NSAlert *alert = [[NSAlert alloc] init];
-    alert.messageText = [NSString stringWithFormat:@"Nextpad++ v%@ %@", version, [loc translate:@"is Available"]];
+    alert.messageText = [NSString stringWithFormat:@"Nextpad v%@ %@", version, [loc translate:@"is Available"]];
     alert.informativeText = [NSString stringWithFormat:
         @"%@ v%@.\n\n%@",
         [loc translate:@"You are currently running"],

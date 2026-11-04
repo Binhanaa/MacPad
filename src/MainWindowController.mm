@@ -1843,11 +1843,11 @@ static NSSet *panelToggleIdents(void) {
 
 static NSDictionary<NSString *, NSArray *> *toolbarGroupMap(void) {
     return @{
-        kTBGroup1:  @[kTBNew, kTBOpen, kTBSave, kTBSaveAll, kTBClose, kTBCloseAll, kTBPrint],
-        kTBGroup2:  @[kTBCut, kTBCopy, kTBPaste],
+        kTBGroup1:  @[kTBNew, kTBOpen, kTBSave, kTBSaveAll, kTBClose, kTBCloseAll],
+        kTBGroup2:  @[kTBCopy, kTBPaste],
         kTBGroup3:  @[kTBUndo, kTBRedo],
-        kTBGroup4:  @[kTBFind, kTBFindRep],
-        kTBGroup5:  @[kTBZoomIn, kTBZoomOut],
+        kTBGroup4:  @[kTBFind],
+        kTBGroup5:  @[],
         kTBGroup6:  @[kTBSyncV, kTBSyncH],
         // Group7 = view toggles — handled specially (includes AllChars dropdown)
         kTBGroup8:  @[kTBUDL, kTBDocMap, kTBDocList, kTBFuncList, kTBFileBrowser],
@@ -1864,10 +1864,9 @@ static NSDictionary<NSString *, NSArray *> *toolbarGroupMap(void) {
 // handles those specially). No vertical dividers between Tahoe groups (by design).
 static NSArray<NSArray *> *tahoeToolbarGroups(void) {
     return @[
-        @[@"File",    @[kTBNew, kTBOpen, kTBSave, kTBPrint],  @[kTBSaveAll, kTBClose, kTBCloseAll]],
-        @[@"Edit",    @[kTBCopy, kTBPaste, kTBUndo, kTBRedo], @[kTBCut]],
-        @[@"Find",    @[kTBFind],                             @[kTBFindRep]],
-        @[@"Zoom",    @[kTBZoomIn, kTBZoomOut],               @[]],
+        @[@"File",    @[kTBNew, kTBOpen, kTBSave],            @[kTBSaveAll, kTBClose, kTBCloseAll]],
+        @[@"Edit",    @[kTBCopy, kTBPaste, kTBUndo, kTBRedo], @[]],
+        @[@"Find",    @[kTBFind],                             @[]],
         @[@"View",    @[kTBWrap, kTBIndentGuide],             @[kTBAllChars]],
         @[@"Sync",    @[kTBSyncV],                            @[kTBSyncH]],
         @[@"Panels",  @[kTBDocList, kTBFileBrowser, kTBFuncList], @[kTBUDL, kTBDocMap, kTBCharPanel, kTBClipboard, kTBProject]],
@@ -2109,7 +2108,7 @@ static void _nppTahoeRoundEditorCard(NSView *container, NSView *content) {
                              NSWindowStyleMaskResizable)
                     backing:NSBackingStoreBuffered
                       defer:NO];
-    window.title = @"Nextpad++";
+    window.title = @"Nextpad";
     window.minSize = NSMakeSize(480, 320);
     [window center];
 
@@ -2289,14 +2288,13 @@ static void _nppTahoeRoundEditorCard(NSView *container, NSView *content) {
     }
     self.window.toolbar = tb;
     self.window.toolbar.visible = [[NSUserDefaults standardUserDefaults] boolForKey:kPrefToolbarVisible];
-    // Expanded style keeps the toolbar in its OWN row below the title bar for
-    // BOTH profiles — matching the Classic layout and the Tahoe mockup. (Unified
-    // crammed the icons into the title row, so we don't use it.) For Tahoe we make
-    // the titlebar transparent so the opaque chrome strip behind the pill groups
-    // drops away and each pill reads as a separate floating element.
+    // Unified compact puts the icon row on the same line as the traffic-light
+    // buttons, so the window doesn't spend a second strip on the title alone.
+    // The title stays inline, after the close/minimize/zoom buttons.
     if (@available(macOS 11.0, *)) {
-        self.window.toolbarStyle = NSWindowToolbarStyleExpanded;
+        self.window.toolbarStyle = NSWindowToolbarStyleUnifiedCompact;
         self.window.titlebarAppearsTransparent = [NppThemeManager shared].usesGlassMaterials;
+        self.window.titlebarSeparatorStyle = NSTitlebarSeparatorStyleNone;
     }
 }
 
@@ -2901,6 +2899,7 @@ static NSImage *_loadPluginIconFromDirs(NSArray<NSString *> *dirs, NSString *fil
 }
 
 static NSToolbarItemIdentifier const kTBUserConfig = @"TB_UserConfig";
+static NSToolbarItemIdentifier const kTBEssentials = @"TB_Essentials";
 
 // YES when the toolbar should render the Tahoe (Liquid Glass) profile. Read at
 // toolbar-build time; resolved by NppThemeManager.effectiveAppearanceStyle
@@ -2910,8 +2909,10 @@ static NSToolbarItemIdentifier const kTBUserConfig = @"TB_UserConfig";
 }
 
 - (NSArray<NSToolbarItemIdentifier> *)toolbarDefaultItemIdentifiers:(NSToolbar *)tb {
-    if ([self _toolbarUsesTahoe]) return [self _tahoeDefaultItemIdentifiers:tb];
-    return [self _classicDefaultItemIdentifiers:tb];
+    // One trailing cluster. People asked for these commands only, starting at
+    // the right edge: New, Open, Undo, Redo, text direction, Search, font size.
+    (void)tb;
+    return @[NSToolbarFlexibleSpaceItemIdentifier, kTBEssentials];
 }
 
 #pragma mark - Tahoe toolbar group model (Liquid Glass)
@@ -3063,7 +3064,6 @@ static NSDictionary<NSString *, NSString *> *_tahoeButtonDisplayNames(void) {
         [ids addObject:kTBTahoePluginsGroup];
     }
     [ids addObject:NSToolbarFlexibleSpaceItemIdentifier];
-    [ids addObject:kTBTabControls];
     return ids;
 }
 
@@ -3073,30 +3073,71 @@ static NSDictionary<NSString *, NSString *> *_tahoeButtonDisplayNames(void) {
     // containing all standard + plugin buttons in XML order
     if ([_toolbarConfig[@"hasUserConfig"] boolValue]) {
         return @[kTBUserConfig,
-                 NSToolbarFlexibleSpaceItemIdentifier,
-                 kTBTabControls];
+                 NSToolbarFlexibleSpaceItemIdentifier];
     }
     return @[kTBGroup1,
              kTBGroup2,
              kTBGroup3,
              kTBGroup4,
-             kTBGroup5,
              kTBGroup6,   // scroll sync
              kTBGroup7,   // view toggles (wrap, allchars, indent guide)
              kTBGroup8,   // panels
              kTBGroup9,   // monitoring
              kTBGroup10,  // macro (no trailing separator)
-             NSToolbarFlexibleSpaceItemIdentifier,
-             kTBTabControls];
+             NSToolbarFlexibleSpaceItemIdentifier];
 }
 
 - (NSArray<NSToolbarItemIdentifier> *)toolbarAllowedItemIdentifiers:(NSToolbar *)tb {
     return [self toolbarDefaultItemIdentifiers:tb];
 }
 
+- (NSToolbarItem *)makeEssentialsToolbarItem {
+    // Left to right, so the first command the user named sits on the right.
+    struct { NSString *symbol; NSString *tip; SEL action; } spec[] = {
+        { @"textformat.size.smaller", @"Decrease Font Size", @selector(zoomOut:) },
+        { @"textformat.size.larger",  @"Increase Font Size", @selector(zoomIn:) },
+        { @"magnifyingglass",         @"Search",             @selector(showFindPanel:) },
+        { @"text.alignright",         @"Text Direction",     @selector(toggleTextDirection:) },
+        { @"arrow.uturn.forward",     @"Redo",               @selector(redo:) },
+        { @"arrow.uturn.backward",    @"Undo",               @selector(undo:) },
+        { @"folder",                  @"Open File",          @selector(openDocument:) },
+        { @"doc.badge.plus",          @"New File",           @selector(newDocument:) },
+    };
+    const NSUInteger n = sizeof(spec) / sizeof(spec[0]);
+    const CGFloat side = 28.0;
+    const CGFloat gap = 4.0;
+    NSView *box = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, n * side + (n - 1) * gap, side)];
+    for (NSUInteger i = 0; i < n; i++) {
+        NSImage *icon = [NSImage imageWithSystemSymbolName:spec[i].symbol accessibilityDescription:spec[i].tip];
+        [icon setTemplate:YES];
+        icon.size = NSMakeSize(16, 16);
+        NSButton *b = [NSButton buttonWithImage:icon target:self action:spec[i].action];
+        b.bordered = NO;
+        b.frame = NSMakeRect(i * (side + gap), 0, side, side);
+        b.toolTip = spec[i].tip;
+        b.imageScaling = NSImageScaleProportionallyDown;
+        [box addSubview:b];
+    }
+    NSToolbarItem *item = [[NSToolbarItem alloc] initWithItemIdentifier:kTBEssentials];
+    item.view = box;
+    item.minSize = box.frame.size;
+    item.maxSize = box.frame.size;
+    item.bordered = NO;
+    return item;
+}
+
+- (void)toggleTextDirection:(id)sender {
+    EditorView *ed = [self currentEditor];
+    if (!ed) return;
+    if ([ed isTextDirectionRTL]) [ed setTextDirectionLTR:sender];
+    else [ed setTextDirectionRTL:sender];
+}
+
 - (NSToolbarItem *)toolbar:(NSToolbar *)tb
      itemForItemIdentifier:(NSToolbarItemIdentifier)ident
  willBeInsertedIntoToolbar:(BOOL)flag {
+    if ([ident isEqualToString:kTBEssentials])
+        return [self makeEssentialsToolbarItem];
     if ([self _toolbarUsesTahoe]) return [self _tahoeToolbarItemForIdentifier:ident];
     NSToolbarItem *item = [self _classicToolbarItemForIdentifier:ident];
     // The macOS-26 SDK gives every NSToolbarItem a bordered "Liquid Glass" capsule by
@@ -7824,9 +7865,6 @@ static NSArray<NSDictionary *> *convertRecordedToXmlFormat(NSArray<NSDictionary 
     EditorView *ed = [self focusedEditor];
     if (!ed) return;
     [ed.scintillaView message:SCI_ZOOMIN];
-    NSInteger zoom = [ed.scintillaView message:SCI_GETZOOM];
-    [[NSUserDefaults standardUserDefaults] setInteger:zoom forKey:kPrefZoomLevel];
-    [self _propagateEditorZoom:zoom];
     [self updateStatusBar];
 }
 
@@ -7836,9 +7874,6 @@ static NSArray<NSDictionary *> *convertRecordedToXmlFormat(NSArray<NSDictionary 
     EditorView *ed = [self focusedEditor];
     if (!ed) return;
     [ed.scintillaView message:SCI_ZOOMOUT];
-    NSInteger zoom = [ed.scintillaView message:SCI_GETZOOM];
-    [[NSUserDefaults standardUserDefaults] setInteger:zoom forKey:kPrefZoomLevel];
-    [self _propagateEditorZoom:zoom];
     [self updateStatusBar];
 }
 
@@ -7848,8 +7883,6 @@ static NSArray<NSDictionary *> *convertRecordedToXmlFormat(NSArray<NSDictionary 
     EditorView *ed = [self focusedEditor];
     if (!ed) return;
     [ed.scintillaView message:SCI_SETZOOM wParam:0];
-    [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:kPrefZoomLevel];
-    [self _propagateEditorZoom:0];
     [self updateStatusBar];
 }
 
@@ -8663,8 +8696,6 @@ static NSArray<NSDictionary *> *convertRecordedToXmlFormat(NSArray<NSDictionary 
 - (void)_editorZoomDidChange:(NSNotification *)note {
     EditorView *ed = note.object;
     if (ed == [self currentEditor]) {
-        NSInteger zoom = ed.zoomLevel;
-        [[NSUserDefaults standardUserDefaults] setInteger:zoom forKey:kPrefZoomLevel];
         [self updateStatusBar];
     }
 }

@@ -437,7 +437,6 @@ NSString *const kPrefStyleFontSize      = @"styleFontSize";
     // Rebuild sidebar page names with new translations
     _pageNames = [NSMutableArray arrayWithArray:@[
         [loc translate:@"General"],
-        [loc translate:@"Toolbar"],
         [loc translate:@"Editor"],
         [loc translate:@"Indentation"],
         [loc translate:@"Tab Bar"],
@@ -452,13 +451,6 @@ NSString *const kPrefStyleFontSize      = @"styleFontSize";
         [loc translate:@"Performance"],
         [loc translate:@"MISC."],
     ]];
-    // Tahoe group: only under the Liquid Glass appearance (Classic Prefs unchanged).
-    if ([NppThemeManager shared].usesGlassMaterials) {
-        NSString *tahoe = [loc translate:@"Tahoe"];
-        NSUInteger dm = [_pageNames indexOfObject:[loc translate:@"Dark Mode"]];
-        if (dm != NSNotFound) [_pageNames insertObject:tahoe atIndex:dm + 1];
-        else [_pageNames addObject:tahoe];
-    }
     // Invalidate cached page views so they rebuild with new translations
     [_pageViews removeAllObjects];
     [_sidebarTable reloadData];
@@ -496,7 +488,6 @@ NSString *const kPrefStyleFontSize      = @"styleFontSize";
     // ── Page names (sidebar rows) ────────────────────────────────────────────
     _pageNames = [NSMutableArray arrayWithArray:@[
         [[NppLocalizer shared] translate:@"General"],
-        [[NppLocalizer shared] translate:@"Toolbar"],
         [[NppLocalizer shared] translate:@"Editor"],
         [[NppLocalizer shared] translate:@"Indentation"],
         [[NppLocalizer shared] translate:@"Tab Bar"],
@@ -511,13 +502,6 @@ NSString *const kPrefStyleFontSize      = @"styleFontSize";
         [[NppLocalizer shared] translate:@"Performance"],
         [[NppLocalizer shared] translate:@"MISC."],
     ]];
-    // Tahoe group: only under the Liquid Glass appearance (Classic Prefs unchanged).
-    if ([NppThemeManager shared].usesGlassMaterials) {
-        NSString *tahoe = [[NppLocalizer shared] translate:@"Tahoe"];
-        NSUInteger dm = [_pageNames indexOfObject:[[NppLocalizer shared] translate:@"Dark Mode"]];
-        if (dm != NSNotFound) [_pageNames insertObject:tahoe atIndex:dm + 1];
-        else [_pageNames addObject:tahoe];
-    }
     _pageViews = [NSMutableDictionary dictionary];
 
     // ── Sidebar (source list table view) ─────────────────────────────────────
@@ -1789,20 +1773,6 @@ static NSDictionary<NSString *, NSString *> *_langDisplayNames() {
     ecField.tag = 1100; ecField.target = self; ecField.action = @selector(prefChanged:);
     [self _commitOnEndEditing:ecField];
     [v addSubview:ecField];
-    y -= 36;
-
-    // ── Fold Margin Style ──
-    NSTextField *foldSection = [NSTextField labelWithString:[loc translate:@"Fold Margin Style"]];
-    foldSection.font = [NSFont boldSystemFontOfSize:NSFont.systemFontSize];
-    foldSection.frame = NSMakeRect(20, y, 300, 20);
-    [v addSubview:foldSection];
-    y -= 28;
-
-    NSPopUpButton *foldPopup = [[NSPopUpButton alloc] initWithFrame:NSMakeRect(20, y-2, 180, 26) pullsDown:NO];
-    [foldPopup addItemsWithTitles:@[[loc translate:@"Box tree"], [loc translate:@"Circle tree"], [loc translate:@"Arrow"], [loc translate:@"Simple +/-"], [loc translate:@"None"]]];
-    [foldPopup selectItemAtIndex:[ud integerForKey:kPrefFoldStyle]];
-    foldPopup.tag = 1104; foldPopup.target = self; foldPopup.action = @selector(prefChanged:);
-    [v addSubview:foldPopup];
     y -= 36;
 
     // ── Line Numbers ──

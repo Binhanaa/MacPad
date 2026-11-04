@@ -1520,7 +1520,7 @@ static int nppDetectEOLMode(const char *bytes, NSUInteger len) {
 
 // Convert NSColor to Scintilla's BGR integer format (r | g<<8 | b<<16)
 static sptr_t sciColor(NSColor *c) {
-    c = [c colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]];
+    c = [c colorUsingColorSpace:[NSColorSpace sRGBColorSpace]];
     if (!c) return 0;
     long r = (long)([c redComponent]   * 255);
     long g = (long)([c greenComponent] * 255);
@@ -1533,8 +1533,8 @@ static NSColor *nppColorFromHex(NSString *hex) {
     if ([hex hasPrefix:@"#"]) hex = [hex substringFromIndex:1];
     unsigned int rgb = 0;
     [[NSScanner scannerWithString:hex] scanHexInt:&rgb];
-    return [NSColor colorWithRed:((rgb >> 16) & 0xFF) / 255.0
-                           green:((rgb >>  8) & 0xFF) / 255.0
+    return [NSColor colorWithSRGBRed:((rgb >> 16) & 0xFF) / 255.0
+                               green:((rgb >>  8) & 0xFF) / 255.0
                             blue:( rgb        & 0xFF) / 255.0
                            alpha:1.0];
 }
@@ -1586,6 +1586,8 @@ static NSString *nppEditorFontName(NSString *name) {
     [sci message:SCI_STYLESETSIZEFRACTIONAL wParam:STYLE_DEFAULT lParam:(sptr_t)(fontSize * 100)];
     [sci setColorProperty:SCI_STYLESETFORE parameter:STYLE_DEFAULT value:fg];
     [sci setColorProperty:SCI_STYLESETBACK parameter:STYLE_DEFAULT value:bg];
+    sci.scrollView.drawsBackground = YES;
+    sci.scrollView.backgroundColor = bg;
 
     // Apply effective Default Style bold/italic/underline (with override
     // substitution if enabled) BEFORE the STYLECLEARALL below, so the
@@ -1783,6 +1785,8 @@ static NSString *nppEditorFontName(NSString *name) {
     [sci message:SCI_STYLESETSIZEFRACTIONAL wParam:STYLE_DEFAULT lParam:(sptr_t)(fontSize * 100)];
     [sci setColorProperty:SCI_STYLESETFORE parameter:STYLE_DEFAULT value:fg];
     [sci setColorProperty:SCI_STYLESETBACK parameter:STYLE_DEFAULT value:bg];
+    sci.scrollView.drawsBackground = YES;
+    sci.scrollView.backgroundColor = bg;
     [sci message:SCI_STYLESETBOLD      wParam:STYLE_DEFAULT lParam:(defBold      ? 1 : 0)];
     [sci message:SCI_STYLESETITALIC    wParam:STYLE_DEFAULT lParam:(defItalic    ? 1 : 0)];
     [sci message:SCI_STYLESETUNDERLINE wParam:STYLE_DEFAULT lParam:(defUnderline ? 1 : 0)];

@@ -2423,11 +2423,12 @@ void EditView::DrawLine(Surface *surface, const EditModel &model, const ViewStyl
 	}
 	int xStart = xOrigin + ((subLine > 0) ? static_cast<int>(ll->wrapIndent) : 0);
 
-	// RTL: paint the whole line with the editor colour before the text runs.
-	// Otherwise only the characters and the spaces between them pick up a
-	// background, and that strip reads as a gray highlight.
-	if (model.BidirectionalR2L() && FlagSet(phase, DrawPhase::back)) {
-		surface->FillRectangleAligned(rcLine, Fill(vsDraw.styles[StyleDefault].back));
+	// Paint the whole line first, in both directions. Character cells alone
+	// leave the gaps transparent, and the window behind them reads as a gray
+	// sheet under Arabic and English text.
+	if (FlagSet(phase, DrawPhase::back)) {
+		const ColourRGBA lineBack = background.value_or(vsDraw.styles[StyleDefault].back).Opaque();
+		surface->FillRectangleAligned(rcLine, Fill(lineBack));
 	}
 
 	// RTL: right-align text — short lines offset right, long lines overflow left.

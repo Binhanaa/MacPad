@@ -57,14 +57,16 @@ static NSColor * _Nullable colorFromRRGGBB(NSString * _Nullable hex) {
     if (!hex.length || hex.length < 6) return nil;
     unsigned int v = 0;
     [[NSScanner scannerWithString:hex] scanHexInt:&v];
-    return [NSColor colorWithRed:((v >> 16) & 0xFF) / 255.0
-                           green:((v >>  8) & 0xFF) / 255.0
-                            blue:( v        & 0xFF) / 255.0
-                           alpha:1.0];
+    // Theme files store sRGB hex. colorWithRed: is calibrated RGB, which
+    // turns a dark gray such as #3F3F3F into a visibly lighter gray on screen.
+    return [NSColor colorWithSRGBRed:((v >> 16) & 0xFF) / 255.0
+                               green:((v >>  8) & 0xFF) / 255.0
+                                blue:( v        & 0xFF) / 255.0
+                               alpha:1.0];
 }
 
 static NSString *hexFromColor(NSColor *c) {
-    NSColor *r = [c colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]];
+    NSColor *r = [c colorUsingColorSpace:[NSColorSpace sRGBColorSpace]];
     unsigned int rv = (unsigned int)(r.redComponent   * 255.0 + 0.5);
     unsigned int gv = (unsigned int)(r.greenComponent * 255.0 + 0.5);
     unsigned int bv = (unsigned int)(r.blueComponent  * 255.0 + 0.5);

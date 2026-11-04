@@ -3097,7 +3097,7 @@ static NSDictionary<NSString *, NSString *> *_tahoeButtonDisplayNames(void) {
         { @"textformat.size.smaller", @"Decrease Font Size", @selector(zoomOut:) },
         { @"textformat.size.larger",  @"Increase Font Size", @selector(zoomIn:) },
         { @"magnifyingglass",         @"Search",             @selector(showFindPanel:) },
-        { @"text.alignright",         @"Text Direction",     @selector(toggleTextDirection:) },
+        { @"arrow.left.and.right",    @"Switch Text Direction", @selector(toggleTextDirection:) },
         { @"arrow.uturn.forward",     @"Redo",               @selector(redo:) },
         { @"arrow.uturn.backward",    @"Undo",               @selector(undo:) },
         { @"folder",                  @"Open File",          @selector(openDocument:) },

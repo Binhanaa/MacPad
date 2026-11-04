@@ -646,16 +646,6 @@ Point EditView::LocationFromPosition(Surface *surface, const EditModel &model, S
 		pt = ll->PointFromPosition(posInLine, vs.lineHeight, pe);
 		pt.x += vs.textStart - model.xOffset;
 
-		// RTL: apply same right-alignment offset as DrawLine
-		if (model.BidirectionalR2L() && !model.BidirectionalEnabled()) {
-			const int subLine = ll->SubLineFromPosition(posInLine, pe);
-			const Range lineRange = ll->SubLineRange(subLine, LineLayout::Scope::visibleOnly);
-			const XYPOSITION subLineStart = ll->positions[lineRange.start];
-			const XYPOSITION lineWidth = ll->positions[lineRange.end] - subLineStart;
-			const XYPOSITION textAreaWidth = rcClient.right - vs.textStart;
-			pt.x += textAreaWidth - lineWidth;
-		}
-
 		if (model.BidirectionalEnabled()) {
 			// Fill the line bidi data
 			UpdateBidiData(model, vs, ll.get());
@@ -675,6 +665,17 @@ Point EditView::LocationFromPosition(Surface *surface, const EditModel &model, S
 			if (posInLine >= ll->LineStart(subLine)) {
 				pt.y = static_cast<XYPOSITION>(subLine*vs.lineHeight);
 			}
+		}
+		// Right-align after the bidi layout replaces x. The caret and the
+		// glyphs then share one origin: the start of an Arabic line sits on
+		// the right, next to the line numbers.
+		if (model.BidirectionalR2L()) {
+			const int subLineAlign = ll->SubLineFromPosition(posInLine, pe);
+			const Range lineRangeAlign = ll->SubLineRange(subLineAlign, LineLayout::Scope::visibleOnly);
+			const XYPOSITION subLineStartAlign = ll->positions[lineRangeAlign.start];
+			const XYPOSITION lineWidth = ll->positions[lineRangeAlign.end] - subLineStartAlign;
+			const XYPOSITION textAreaWidth = rcClient.right - vs.rightMarginWidth - vs.textStart;
+			pt.x += textAreaWidth - lineWidth;
 		}
 		pt.y += static_cast<XYPOSITION>((lineVisible - topLine) * vs.lineHeight);
 		pt.x += pos.VirtualSpaceWidth(vs.styles[ll->EndLineStyle()].spaceWidth);
@@ -730,12 +731,12 @@ SelectionPosition EditView::SPositionFromLocation(Surface *surface, const EditMo
 			const XYPOSITION subLineStart = ll->positions[rangeSubLine.start];
 			if (subLine > 0)	// Wrapped
 				pt.x -= ll->wrapIndent;
-			// The manual shift is only for documents that cannot run the bidi
-			// layout. When bidi is on, PositionFromX is already in visual
-			// order; subtracting the shift maps the end of the line to the start.
-			if (model.BidirectionalR2L() && !model.BidirectionalEnabled()) {
+			// The line is drawn shifted so its right edge meets the text area.
+			// PositionFromX is measured from the left of that line, so undo
+			// the same shift before either hit-test path.
+			if (model.BidirectionalR2L()) {
 				const XYPOSITION lineWidth = ll->positions[rangeSubLine.end] - subLineStart;
-				const XYPOSITION textAreaWidth = rcClient.right - vs.textStart;
+				const XYPOSITION textAreaWidth = rcClient.right - vs.rightMarginWidth - vs.textStart;
 				pt.x -= (textAreaWidth - lineWidth);
 			}
 			Sci::Position positionInLine = 0;
@@ -1565,8 +1566,9 @@ void EditView::DrawCarets(Surface *surface, const EditModel &model, const ViewSt
 				const XYPOSITION caretWidthOffset = (xposCaret > 0) ? justOverHalf : 0;
 
 				xposCaret += xOrigin;
-				// RTL: apply same right-alignment offset as DrawLine
-				if (model.BidirectionalR2L() && !model.BidirectionalEnabled()) {
+				// RTL: same right-alignment offset as DrawLine, after the
+				// bidi caret x has replaced the logical position.
+				if (model.BidirectionalR2L()) {
 					const Range lineRange = ll->SubLineRange(subLine, LineLayout::Scope::visibleOnly);
 					const XYPOSITION subLineStart = ll->positions[lineRange.start];
 					const XYPOSITION lineWidth = ll->positions[lineRange.end] - subLineStart;
@@ -2428,8 +2430,10 @@ void EditView::DrawLine(Surface *surface, const EditModel &model, const ViewStyl
 		surface->FillRectangleAligned(rcLine, Fill(vsDraw.styles[StyleDefault].back));
 	}
 
-	// RTL: right-align text — short lines offset right, long lines overflow left
-	if (model.BidirectionalR2L() && !model.BidirectionalEnabled()) {
+	// RTL: right-align text — short lines offset right, long lines overflow left.
+	// UTF-8 documents still need this. Bidirectional layout reorders the
+	// glyphs inside the line; it does not move the line to the right edge.
+	if (model.BidirectionalR2L()) {
 		const XYPOSITION lineWidth = ll->positions[lineRange.end] - subLineStart;
 		const XYPOSITION textAreaWidth = rcLine.right - rcLine.left;
 		xStart += static_cast<int>(textAreaWidth - lineWidth);

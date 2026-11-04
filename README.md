@@ -18,7 +18,7 @@ macOS 11 or later. Apple silicon and Intel.
 - Edit source in a native window: Swift, C, C++, Objective-C, Python, JavaScript, PHP, HTML, CSS, JSON, XML, shell, and many more.
 - Keep several files open in tabs and restore the session.
 - Search and replace, including regular expressions.
-- Fold code with a simple margin that stays readable in both text directions.
+- Fold code with a simple margin that stays readable in both text directions. Preferences can show or hide that margin.
 - Write Arabic and other right-to-left text. The scrollbar moves to the left, and selection follows the word you click.
 - Change the font size of the current file without resizing every open tab.
 

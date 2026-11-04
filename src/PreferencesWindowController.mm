@@ -98,6 +98,7 @@ NSString *const kPrefPaddingLeft         = @"paddingLeft";
 NSString *const kPrefPaddingRight        = @"paddingRight";
 NSString *const kPrefPanelKeepState      = @"panelKeepState";
 NSString *const kPrefFoldStyle           = @"foldStyle";
+NSString *const kPrefShowFoldMargin      = @"showFoldMargin";
 NSString *const kPrefLineNumDynWidth     = @"lineNumDynWidth";
 NSString *const kPrefInSelThreshold      = @"inSelThreshold";
 NSString *const kPrefFuncListUseXML      = @"funcListUseXML";
@@ -263,7 +264,8 @@ NSString *const kPrefStyleFontSize      = @"styleFontSize";
         kPrefPaddingLeft:          @0,
         kPrefPaddingRight:         @0,
         kPrefPanelKeepState:       @YES,
-        kPrefFoldStyle:            @0,    // 0=box 1=circle 2=arrow 3=simple 4=none
+        kPrefFoldStyle:            @3,    // simple +/−
+        kPrefShowFoldMargin:       @YES,
         kPrefLineNumDynWidth:      @YES,
         kPrefInSelThreshold:       @1024,
         kPrefFuncListUseXML:       @YES,
@@ -1782,6 +1784,14 @@ static NSDictionary<NSString *, NSString *> *_langDisplayNames() {
     dynWidth.state = [ud boolForKey:kPrefLineNumDynWidth] ? NSControlStateValueOn : NSControlStateValueOff;
     dynWidth.tag = 1105;
     [v addSubview:dynWidth];
+    y -= 28;
+
+    NSButton *foldMargin = [NSButton checkboxWithTitle:[loc translate:@"Show fold margin"]
+                                                 target:self action:@selector(prefChanged:)];
+    foldMargin.frame = NSMakeRect(20, y, 350, 20);
+    foldMargin.state = [ud boolForKey:kPrefShowFoldMargin] ? NSControlStateValueOn : NSControlStateValueOff;
+    foldMargin.tag = 1106;
+    [v addSubview:foldMargin];
     y -= 36;
 
     // ── Padding ──
@@ -2547,6 +2557,7 @@ static NSDictionary<NSString *, NSString *> *_langDisplayNames() {
         case 1103: [ud setInteger:[(NSTextField *)sender integerValue] forKey:kPrefPaddingRight]; break;
         case 1104: [ud setInteger:[(NSPopUpButton *)sender indexOfSelectedItem] forKey:kPrefFoldStyle]; break;
         case 1105: [ud setBool:[(NSButton *)sender state] == NSControlStateValueOn forKey:kPrefLineNumDynWidth]; break;
+        case 1106: [ud setBool:[(NSButton *)sender state] == NSControlStateValueOn forKey:kPrefShowFoldMargin]; break;
         // MISC
         case 1200: [ud setBool:[(NSButton *)sender state] == NSControlStateValueOn forKey:kPrefMuteSounds]; break;
         case 1201: [ud setBool:[(NSButton *)sender state] == NSControlStateValueOn forKey:kPrefSaveAllConfirm]; break;

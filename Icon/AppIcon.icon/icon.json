@@ -1,29 +1,51 @@
 {
-  "fill" : {
-    "automatic-gradient" : "srgb:0.16000,0.38000,0.86000,1.00000"
-  },
+  "fill-specializations" : [
+    {
+      "value" : {
+        "solid" : "srgb:1.00000,1.00000,1.00000,1.00000"
+      }
+    },
+    {
+      "appearance" : "dark",
+      "value" : {
+        "solid" : "srgb:0.00000,0.00000,0.00000,1.00000"
+      }
+    }
+  ],
   "groups" : [
     {
       "layers" : [
         {
           "image-name" : "front.svg",
-          "name" : "front",
-          "glass" : true
+          "name" : "Mark",
+          "hidden-specializations" : [
+            {
+              "appearance" : "dark",
+              "value" : true
+            }
+          ]
         },
         {
-          "image-name" : "back.svg",
-          "name" : "back",
-          "glass" : true,
-          "opacity" : 0.55
+          "hidden-specializations" : [
+            {
+              "value" : true
+            },
+            {
+              "appearance" : "dark",
+              "value" : false
+            }
+          ],
+          "image-name" : "front-dark.svg",
+          "name" : "Mark Dark"
         }
       ],
       "shadow" : {
-        "kind" : "neutral",
-        "opacity" : 0.5
+        "kind" : "none",
+        "opacity" : 0
       },
       "translucency" : {
-        "enabled" : true,
-        "value" : 0.45
+        "enabled" : false,
+        "value" : 0
       }
     }
   ],

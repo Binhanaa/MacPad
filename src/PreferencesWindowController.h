@@ -102,7 +102,8 @@ extern NSString *const kPrefEdgeMode;            // NSInteger, 0=off 1=line 2=ba
 extern NSString *const kPrefPaddingLeft;         // NSInteger, 0-30, default 0
 extern NSString *const kPrefPaddingRight;        // NSInteger, 0-30, default 0
 extern NSString *const kPrefPanelKeepState;      // BOOL, default YES
-extern NSString *const kPrefFoldStyle;           // NSInteger, 0=box 1=circle 2=arrow 3=simple 4=none
+extern NSString *const kPrefFoldStyle;           // NSInteger, legacy. The margin is simple +/- or hidden.
+extern NSString *const kPrefShowFoldMargin;      // BOOL, default YES — show the simple +/- fold margin
 extern NSString *const kPrefLineNumDynWidth;     // BOOL, default YES
 extern NSString *const kPrefInSelThreshold;      // NSInteger, default 1024
 extern NSString *const kPrefFuncListUseXML;      // BOOL, default YES — use XML parsers vs hardcoded regex

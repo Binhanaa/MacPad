@@ -1885,18 +1885,21 @@ static NSString *nppEditorFontName(NSString *name) {
     [sci message:SCI_SETMARGINSENSITIVEN wParam:2 lParam:0];
 
     // ── Code folding (margin 3) ───────────────────────────────────────────────
+    // Simple +/− only. Preferences can hide the margin; the markers stay defined.
     [sci message:SCI_SETMARGINTYPEN      wParam:3 lParam:SC_MARGIN_SYMBOL];
     [sci message:SCI_SETMARGINMASKN      wParam:3 lParam:(sptr_t)SC_MASK_FOLDERS];
-    [sci message:SCI_SETMARGINWIDTHN     wParam:3 lParam:12];
+    {
+        BOOL showFold = [[NSUserDefaults standardUserDefaults] boolForKey:kPrefShowFoldMargin];
+        [sci message:SCI_SETMARGINWIDTHN wParam:3 lParam:showFold ? 12 : 0];
+    }
     [sci message:SCI_SETMARGINSENSITIVEN wParam:3 lParam:1];
-    // Box-tree style (NPP default): ⊟ / ⊞ with connecting lines
-    [sci message:SCI_MARKERDEFINE wParam:SC_MARKNUM_FOLDER        lParam:SC_MARK_BOXPLUS];
-    [sci message:SCI_MARKERDEFINE wParam:SC_MARKNUM_FOLDEROPEN    lParam:SC_MARK_BOXMINUS];
-    [sci message:SCI_MARKERDEFINE wParam:SC_MARKNUM_FOLDEREND     lParam:SC_MARK_BOXPLUSCONNECTED];
-    [sci message:SCI_MARKERDEFINE wParam:SC_MARKNUM_FOLDEROPENMID lParam:SC_MARK_BOXMINUSCONNECTED];
-    [sci message:SCI_MARKERDEFINE wParam:SC_MARKNUM_FOLDERMIDTAIL lParam:SC_MARK_TCORNERCURVE];
-    [sci message:SCI_MARKERDEFINE wParam:SC_MARKNUM_FOLDERTAIL    lParam:SC_MARK_LCORNERCURVE];
-    [sci message:SCI_MARKERDEFINE wParam:SC_MARKNUM_FOLDERSUB     lParam:SC_MARK_VLINE];
+    [sci message:SCI_MARKERDEFINE wParam:SC_MARKNUM_FOLDER        lParam:SC_MARK_PLUS];
+    [sci message:SCI_MARKERDEFINE wParam:SC_MARKNUM_FOLDEROPEN    lParam:SC_MARK_MINUS];
+    [sci message:SCI_MARKERDEFINE wParam:SC_MARKNUM_FOLDEREND     lParam:SC_MARK_PLUS];
+    [sci message:SCI_MARKERDEFINE wParam:SC_MARKNUM_FOLDEROPENMID lParam:SC_MARK_MINUS];
+    [sci message:SCI_MARKERDEFINE wParam:SC_MARKNUM_FOLDERMIDTAIL lParam:SC_MARK_EMPTY];
+    [sci message:SCI_MARKERDEFINE wParam:SC_MARKNUM_FOLDERTAIL    lParam:SC_MARK_EMPTY];
+    [sci message:SCI_MARKERDEFINE wParam:SC_MARKNUM_FOLDERSUB     lParam:SC_MARK_EMPTY];
     // Fold margin background from "Fold margin" global style
     NPPStyleEntry *gsFoldMargin = [store globalStyleNamed:@"Fold margin"];
     sptr_t foldMarginBGR;
@@ -2661,22 +2664,18 @@ int NppScintillaDefaultKeyCombos(int sciID, int *combos, int maxCombos) {
     // Falls back to the fixed 44 px just set above when dyn-width is OFF.
     [self recomputeLineNumberMargin];
 
-    // ── Fold margin style ──
+    // ── Fold margin ──
+    // Simple +/− in both text directions. Width 0 hides it.
     {
-        // One fold marker: simple +/- . It stays readable in both directions.
-        {
-            [sci message:SCI_SETMARGINWIDTHN wParam:3 lParam:12];
-            int plus=SC_MARK_PLUS, minus=SC_MARK_MINUS;
-            int plusC=SC_MARK_PLUS, minusC=SC_MARK_MINUS;
-            int mid=SC_MARK_EMPTY, tail=SC_MARK_EMPTY, sub=SC_MARK_EMPTY;
-            [sci message:SCI_MARKERDEFINE wParam:SC_MARKNUM_FOLDER        lParam:plus];
-            [sci message:SCI_MARKERDEFINE wParam:SC_MARKNUM_FOLDEROPEN    lParam:minus];
-            [sci message:SCI_MARKERDEFINE wParam:SC_MARKNUM_FOLDEREND     lParam:plusC];
-            [sci message:SCI_MARKERDEFINE wParam:SC_MARKNUM_FOLDEROPENMID lParam:minusC];
-            [sci message:SCI_MARKERDEFINE wParam:SC_MARKNUM_FOLDERMIDTAIL lParam:mid];
-            [sci message:SCI_MARKERDEFINE wParam:SC_MARKNUM_FOLDERTAIL    lParam:tail];
-            [sci message:SCI_MARKERDEFINE wParam:SC_MARKNUM_FOLDERSUB     lParam:sub];
-        }
+        BOOL showFold = [ud boolForKey:kPrefShowFoldMargin];
+        [sci message:SCI_SETMARGINWIDTHN wParam:3 lParam:showFold ? 12 : 0];
+        [sci message:SCI_MARKERDEFINE wParam:SC_MARKNUM_FOLDER        lParam:SC_MARK_PLUS];
+        [sci message:SCI_MARKERDEFINE wParam:SC_MARKNUM_FOLDEROPEN    lParam:SC_MARK_MINUS];
+        [sci message:SCI_MARKERDEFINE wParam:SC_MARKNUM_FOLDEREND     lParam:SC_MARK_PLUS];
+        [sci message:SCI_MARKERDEFINE wParam:SC_MARKNUM_FOLDEROPENMID lParam:SC_MARK_MINUS];
+        [sci message:SCI_MARKERDEFINE wParam:SC_MARKNUM_FOLDERMIDTAIL lParam:SC_MARK_EMPTY];
+        [sci message:SCI_MARKERDEFINE wParam:SC_MARKNUM_FOLDERTAIL    lParam:SC_MARK_EMPTY];
+        [sci message:SCI_MARKERDEFINE wParam:SC_MARKNUM_FOLDERSUB     lParam:SC_MARK_EMPTY];
     }
 
     // ── Disable text drag-drop ──

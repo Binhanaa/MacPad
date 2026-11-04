@@ -1,3 +1,3 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
-  <path fill="#ffffff" fill-rule="evenodd" d="M312 172H640l128 128v496a56 56 0 0 1-56 56H312a56 56 0 0 1-56-56V228a56 56 0 0 1 56-56z M392 362h64l104 168V362h64v300h-64L456 494v168h-64V362z"/>
+  <path fill="#000000" d="M312 292H432L592 522V292H712V732H592L432 502V732H312Z"/>
 </svg>
